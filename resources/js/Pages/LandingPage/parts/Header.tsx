@@ -42,7 +42,7 @@ export default function Header() {
                             Cegah Risiko
                         </h1>
                     </div>
-                    <h1 className="text-center text-3xl font-bold text-gray-700 md:text-6xl">
+                    <h1 className="text-center text-3xl font-bold text-gray-700 md:text-6xl md:px-0 px-5">
                         Lindungi Sumber Daya Alam
                     </h1>
                     <p className="mx-auto md:max-w-xl max-w-xs mt-4 text-center text-xl font-medium text-gray-700 md:w-2/3">

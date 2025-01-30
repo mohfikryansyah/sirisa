@@ -93,7 +93,7 @@ export function ComplaintForm() {
                     Laporkan
                 </Button>
             </DrawerTrigger>
-            <DrawerContent className="h-[95vh]">
+            <DrawerContent className="h-[85vh]">
                 <DrawerHeader className="text-left">
                     <DrawerTitle>Edit profile</DrawerTitle>
                     <DrawerDescription>
