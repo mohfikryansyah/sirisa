@@ -4,7 +4,7 @@ import $ from "jquery";
 
 export default function UsaPopulationMap() {
     const chartRef = useRef<HTMLDivElement>(null);
-    const ROOT_PATH = "https://sirisa-react.test/geojson";
+    const ROOT_PATH = `${window.location.origin}/geojson`;
 
     useEffect(() => {
         if (!chartRef.current) return;
