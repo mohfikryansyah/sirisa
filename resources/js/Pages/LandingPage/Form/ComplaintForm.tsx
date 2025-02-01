@@ -36,7 +36,7 @@ import {
 } from "@/Components/ui/form";
 import toast from "react-hot-toast";
 import { router } from "@inertiajs/react";
-import { z } from "zod";
+import { set, z } from "zod";
 import { FormPengaduan } from "@/schema/schema";
 import { Textarea } from "@/Components/ui/textarea";
 import { Coordinates } from "@/types";
@@ -46,6 +46,7 @@ import MyMapComponent from "./MyMap";
 
 export function ComplaintForm() {
     const [open, setOpen] = React.useState(false);
+    const [disable, setDisable] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
     if (isDesktop) {
@@ -71,10 +72,10 @@ export function ComplaintForm() {
                         </DialogDescription>
                     </DialogHeader>
                     <div className="overflow-y-auto pr-3 pb-3 scrollbar-thin">
-                        <Form />
+                        <Form setDisable={setDisable} />
                     </div>
                     <DialogFooter>
-                        <Button type="submit" form="complaint-form">
+                        <Button type="submit" form="complaint-form" disabled={disable}>
                             Kirim Pengaduan
                         </Button>
                     </DialogFooter>
@@ -95,23 +96,23 @@ export function ComplaintForm() {
             </DrawerTrigger>
             <DrawerContent className="h-[85vh]">
                 <DrawerHeader className="text-left">
-                    <DrawerTitle>Edit profile</DrawerTitle>
+                    <DrawerTitle>Laporkan</DrawerTitle>
                     <DrawerDescription>
-                        Make changes to your profile here. Click save when
-                        you're done.
+                    Setiap laporan yang Anda kirim membantu dalam upaya
+                    perlindungan sumber daya alam dan mitigasi risiko.
                     </DrawerDescription>
                 </DrawerHeader>
                 <div
                     className="overflow-y-auto px-4 scrollbar-thin pb-4"
                     data-lenis-prevent
                 >
-                    <Form className="px-4" />
+                    <Form className="px-4" setDisable={setDisable} />
                 </div>
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DrawerClose>
-                    <Button type="submit" form="complaint-form">
+                    <Button type="submit" disabled={disable} form="complaint-form">
                         Kirim Pengaduan
                     </Button>
                 </DrawerFooter>
@@ -120,7 +121,7 @@ export function ComplaintForm() {
     );
 }
 
-function Form({ className }: React.ComponentProps<"form">) {
+function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDisable: React.Dispatch<React.SetStateAction<boolean>> }) {
     const form = useForm<z.infer<typeof FormPengaduan>>({
         resolver: zodResolver(FormPengaduan),
         defaultValues: {
@@ -136,14 +137,17 @@ function Form({ className }: React.ComponentProps<"form">) {
     });
 
     function onSubmit() {
+        setDisable(true);
         router.post(route("complaint.store"), form.getValues(), {
             onSuccess: () => {
                 toast.success("Pengaduan berhasil dikirim!");
                 form.reset();
                 form.setValue("audio", undefined);
                 form.setValue("telp", "");
+                setDisable(false);
             },
             onError: (errors) => {
+                setDisable(false);
                 toast.error("Terjadi Kesalahan");
             },
         });

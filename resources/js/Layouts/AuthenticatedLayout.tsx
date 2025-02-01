@@ -2,7 +2,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { AppSidebar } from "@/Components/sidebar/app-sidebar";
+import { AppSidebar } from "@/Layouts/Sidebar/app-sidebar";
 import {
     Breadcrumb,
     BreadcrumbList,

@@ -14,26 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import NavbarLogo from "@/Components/ui/navbar-logo";
 
-const navbar = [
-    {
-        url: "#",
-        label: "Home",
-    },
-    {
-        url: "#about",
-        label: "About",
-    },
-    {
-        url: "#whyus",
-        label: "WhyUs",
-    },
-    {
-        url: "#",
-        label: "About",
-    },
-];
-
-export default function Navbar() {
+export default function Navbar({navbar}: {navbar: {label: string, url: string}[]}) {
     const { auth } = usePage<PageProps>().props;
     const [scrollY, setScrollY] = useState<number>(0);
     const navbarRef = useRef<HTMLElement | null>(null);

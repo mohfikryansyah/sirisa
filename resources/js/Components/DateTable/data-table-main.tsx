@@ -41,6 +41,8 @@ export function DataTable<TData, TValue>({columns, data, filter}: DataTableProps
         getFilteredRowModel: getFilteredRowModel(),
         onGlobalFilterChange: setGlobalFilter,
         onColumnVisibilityChange: setColumnVisibility,
+        // manualPagination: true,
+        
         state: {
             sorting,
             globalFilter,
