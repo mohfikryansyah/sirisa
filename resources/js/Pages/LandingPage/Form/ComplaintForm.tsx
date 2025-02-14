@@ -5,6 +5,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/Components/ui/button";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -35,7 +36,7 @@ import {
     FormMessage,
 } from "@/Components/ui/form";
 import toast from "react-hot-toast";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { set, z } from "zod";
 import { FormPengaduan } from "@/schema/schema";
 import { Textarea } from "@/Components/ui/textarea";
@@ -43,6 +44,7 @@ import { Coordinates } from "@/types";
 import VoiceRecorder from "./VoiceRecorder";
 import { FileUpload } from "@/Components/ui/file-upload";
 import MyMapComponent from "./MyMap";
+import { FormEventHandler, useEffect } from "react";
 
 export function ComplaintForm() {
     const [open, setOpen] = React.useState(false);
@@ -63,6 +65,9 @@ export function ComplaintForm() {
                 <DialogContent
                     className="sm:max-w-4xl h-[90vh]"
                     data-lenis-prevent
+                    onInteractOutside={(e) => {
+                        e.preventDefault();
+                    }}
                 >
                     <DialogHeader>
                         <DialogTitle>Laporkan</DialogTitle>
@@ -72,10 +77,19 @@ export function ComplaintForm() {
                         </DialogDescription>
                     </DialogHeader>
                     <div className="overflow-y-auto pr-3 pb-3 scrollbar-thin">
-                        <Form setDisable={setDisable} />
+                        <Form setDisable={setDisable} setOpen={setOpen} />
                     </div>
                     <DialogFooter>
-                        <Button type="submit" form="complaint-form" disabled={disable}>
+                        <DialogClose asChild>
+                            <Button type="button" variant="outline">
+                                Close
+                            </Button>
+                        </DialogClose>
+                        <Button
+                            type="submit"
+                            form="complaint-form"
+                            disabled={disable}
+                        >
                             Kirim Pengaduan
                         </Button>
                     </DialogFooter>
@@ -98,21 +112,29 @@ export function ComplaintForm() {
                 <DrawerHeader className="text-left">
                     <DrawerTitle>Laporkan</DrawerTitle>
                     <DrawerDescription>
-                    Setiap laporan yang Anda kirim membantu dalam upaya
-                    perlindungan sumber daya alam dan mitigasi risiko.
+                        Setiap laporan yang Anda kirim membantu dalam upaya
+                        perlindungan sumber daya alam dan mitigasi risiko.
                     </DrawerDescription>
                 </DrawerHeader>
                 <div
                     className="overflow-y-auto px-4 scrollbar-thin pb-4"
                     data-lenis-prevent
                 >
-                    <Form className="px-4" setDisable={setDisable} />
+                    <Form
+                        className="px-4"
+                        setDisable={setDisable}
+                        setOpen={setOpen}
+                    />
                 </div>
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DrawerClose>
-                    <Button type="submit" disabled={disable} form="complaint-form">
+                    <Button
+                        type="submit"
+                        disabled={disable}
+                        form="complaint-form"
+                    >
                         Kirim Pengaduan
                     </Button>
                 </DrawerFooter>
@@ -121,7 +143,13 @@ export function ComplaintForm() {
     );
 }
 
-function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDisable: React.Dispatch<React.SetStateAction<boolean>> }) {
+function Form({
+    className,
+    setDisable,
+    setOpen,
+}: React.ComponentProps<"form"> & {
+    setDisable: React.Dispatch<React.SetStateAction<boolean>>;
+} & { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
     const form = useForm<z.infer<typeof FormPengaduan>>({
         resolver: zodResolver(FormPengaduan),
         defaultValues: {
@@ -136,7 +164,9 @@ function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDis
         mode: "onChange",
     });
 
-    function onSubmit() {
+    const onSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
         setDisable(true);
         router.post(route("complaint.store"), form.getValues(), {
             onSuccess: () => {
@@ -145,17 +175,27 @@ function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDis
                 form.setValue("audio", undefined);
                 form.setValue("telp", "");
                 setDisable(false);
+                setOpen && setOpen(false);
             },
             onError: (errors) => {
                 setDisable(false);
                 toast.error("Terjadi Kesalahan");
+                Object.keys(errors).forEach((key) => {
+                    form.setError(key as keyof z.infer<typeof FormPengaduan>, {
+                        type: "server",
+                        message: errors[key],
+                    });
+                });
             },
         });
-    }
+    };
 
     const handleCoordinatesChange = (coords: Coordinates) => {
         form.setValue("latitude", coords.lat);
         form.setValue("longitude", coords.lng);
+
+        form.trigger("latitude");
+        form.trigger("longitude");
     };
 
     const handleFileUpload = (uploadedFiles: File[]) => {
@@ -170,7 +210,7 @@ function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDis
     return (
         <Forms {...form}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={onSubmit}
                 encType="multipart/form-data"
                 className="space-y-4"
                 id="complaint-form"
@@ -196,7 +236,7 @@ function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDis
                     <FormField
                         control={form.control}
                         name="telp"
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
                                 <FormLabel>Nomor HP</FormLabel>
                                 <FormControl>
@@ -204,7 +244,10 @@ function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDis
                                         type="tel"
                                         placeholder="Masukkan nomor HP Anda"
                                         {...field}
-                                        className="focus-visible:ring-[#063b3e] block h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background md:text-sm"
+                                        className={cn(
+                                            "focus-visible:ring-[#063b3e] block h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background md:text-sm",
+                                            fieldState.error && "border-red-500"
+                                        )}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -300,6 +343,10 @@ function Form({ className, setDisable }: React.ComponentProps<"form"> & { setDis
                                                 "longitude",
                                                 longitude
                                             );
+
+                                            form.trigger("latitude");
+                                            form.trigger("longitude");
+
                                             setCurrentLocation({
                                                 lat: latitude,
                                                 lng: longitude,

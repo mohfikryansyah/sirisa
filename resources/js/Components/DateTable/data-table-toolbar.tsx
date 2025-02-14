@@ -11,17 +11,13 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 import { Complaint, Status } from "@/types";
 import { router } from "@inertiajs/react";
 import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/Components/ui/dialog";
 import toast from "react-hot-toast";
@@ -67,7 +63,8 @@ export function TableToolbar<TData>({
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const handleDeleteSelectedRows = () => {
+    const handleDeleteSelectedRows: FormEventHandler = (e) => {
+        e.preventDefault();
         if (table.getFilteredSelectedRowModel().rows.length === 0) {
             alert("Pilih setidaknya satu baris untuk dihapus.");
             return;
@@ -91,13 +88,24 @@ export function TableToolbar<TData>({
     return (
         <div className="flex items-center py-4">
             <div className="flex items-center space-x-2 w-full">
-                <Input
+                {/* <Input
                     placeholder="Cari nama..."
                     value={globalFilter}
                     onChange={(e) =>
                         table.setGlobalFilter(String(e.target.value))
                     }
                     className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                /> */}
+
+                <Input
+                    placeholder="Filter emails..."
+                    value={table.getColumn("Nama")?.getFilterValue() as string}
+                    onChange={(e) => {
+                        table
+                            .getColumn("Nama")
+                            ?.setFilterValue(e.target.value);
+                    }}
+                    className="max-w-sm"
                 />
 
                 {table.getColumn("Status") && (
@@ -155,7 +163,7 @@ export function TableToolbar<TData>({
                             className="ml-2"
                             disabled={
                                 table.getFilteredSelectedRowModel().rows
-                                    .length === 0
+                                    .length <= 1
                             }
                         >
                             <Trash2 className="h-4 w-4 text-red-500" />
@@ -180,9 +188,7 @@ export function TableToolbar<TData>({
                                 <Button
                                     variant={"default"}
                                     className="bg-red-500 hover:bg-red-600 active:scale-90 transition-all duration-300"
-                                    onClick={() => {
-                                        handleDeleteSelectedRows();
-                                    }}
+                                    onClick={handleDeleteSelectedRows}
                                     disabled={
                                         table.getFilteredSelectedRowModel().rows
                                             .length === 0

@@ -14,7 +14,7 @@ export default function UsaPopulationMap() {
         chartInstance.showLoading();
 
         // Fetch the map JSON data
-        $.get(`${ROOT_PATH}/USA.json`, function (usaJson: any) {
+        $.get(`${ROOT_PATH}/gempa.geojson`, function (usaJson: any) {
             chartInstance.hideLoading();
 
             echarts.registerMap("USA", usaJson, {
@@ -91,7 +91,7 @@ export default function UsaPopulationMap() {
                             },
                         },
                         data: [
-                            { name: "Alabama", value: 1 },
+                            { name: "Alabama", value: 4 },
                             { name: "Alaska", value: 1 },
                             { name: "Arizona", value: 1 },
                             { name: "Arkansas", value: 1 },
@@ -156,5 +156,5 @@ export default function UsaPopulationMap() {
         };
     }, []);
 
-    return <div id="map" ref={chartRef} className="max-w-for-monitor h-[45rem] mx-auto" />;
+    return <div id="map" ref={chartRef} className="max-w-for-monitor h-[45rem] mx-auto py-20" />;
 }

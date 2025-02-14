@@ -4,6 +4,7 @@
 import * as React from "react";
 import {
     ColumnDef,
+    ColumnFiltersState,
     SortingState,
     VisibilityState,
     getCoreRowModel,
@@ -25,27 +26,35 @@ interface DataTableProps<TData, TValue> {
     filter?: Status[];
 }
 
-export function DataTable<TData, TValue>({columns, data, filter}: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+    columns,
+    data,
+    filter,
+}: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState("");
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
+    const [columnFilters, setColumnFilters] =
+        React.useState<ColumnFiltersState>([]);
 
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        onColumnFiltersChange: setColumnFilters,
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onGlobalFilterChange: setGlobalFilter,
         onColumnVisibilityChange: setColumnVisibility,
         // manualPagination: true,
-        
+
         state: {
             sorting,
             globalFilter,
+            columnFilters,
             columnVisibility,
         },
     });

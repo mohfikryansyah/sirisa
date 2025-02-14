@@ -1,8 +1,8 @@
-import { ExpandableCardDemo } from "../Risiko/card";
+import { ExpandableCardDemo } from "../Risiko/ExpandableCard";
 
 export default function Risiko() {
     return (
-        <section id="risiko" className="w-full pb-20 md:px-0 px-4">
+        <section id="risiko" className="w-full py-20 px-4">
             <div className="relative max-w-for-monitor rounded-3xl h-auto mx-auto bg-gradient-to-r from-[#187f80] to-[#14a89c] overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center z-0">
                     <img
@@ -19,9 +19,8 @@ export default function Risiko() {
                             Kenapa Harus Memahami Risiko?
                         </h1>
                         <p className="mx-auto w-full text-center text-white/65 lg:w-2/3 lg:text-lg">
-                            Temukan pengalaman belajar terbaik dengan mentor
-                            berpengalaman dan course yang dirancang khusus
-                            untukmu sesuai standar industri
+                            Dengan memahami risiko, kita dapat mengambil langkah
+                            pencegahan untuk menghindari kerugian.
                         </p>
                         <div className="pt-10 md:px-0 px-3">
                             <ExpandableCardDemo />

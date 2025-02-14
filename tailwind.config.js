@@ -44,7 +44,11 @@ export default {
     			jakartasans: [
     				'Plus Jakarta Sans',
     				'serif'
-    			]
+    			],
+    			grapenuts: [
+    				'Grape Nuts',
+    				'serif'
+    			],
     		},
     		maxWidth: {
     			'for-monitor': '77rem'

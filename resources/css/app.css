@@ -97,6 +97,10 @@
     .rounded-scrollbar::-webkit-scrollbar {
         width: 8px;
     }
+    
+    .bg-radial-gradient {
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 60%);
+    }
 }
 
 @layer base {

@@ -28,4 +28,9 @@ export const FormRepair = z.object({
               message: "Hanya angka atau angka dengan titik yang diperbolehkan.",
                 }).nonempty()]),
     note: z.string(),
-})
+});
+
+export const searchComplaintSchema = z.string()
+    .min(10, { message: "Nomor telp harus memiliki minimal 10 karakter" })
+    .max(14, { message: "Nomor telp harus memiliki maksimal 14 karakter" })
+    .regex(/^\d+$/, { message: "Nomor telp hanya boleh berisi angka" });

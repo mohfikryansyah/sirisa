@@ -21,6 +21,7 @@ Route::get('/dashboard', function () {
 
 Route::post('/complaint', [ComplaintController::class, 'store'])->name('complaint.store');
 Route::delete('/complaint/delete-selected-rows', [ComplaintController::class, 'deleteSelectedRows'])->name('complaint.deleteSelectedRows');
+Route::get('/result', [ComplaintController::class, 'search'])->name('complaint.search');
 
 Route::middleware('auth')->group(function () {
     Route::resource('/complaint', ComplaintController::class)->except('store');

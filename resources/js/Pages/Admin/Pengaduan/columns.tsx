@@ -4,6 +4,7 @@ import * as React from "react";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import {
     ArrowUpDown,
+    Eye,
     MoreHorizontal,
     Trash2,
     TriangleAlert,
@@ -38,14 +39,8 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/Components/ui/dialog";
-import { Input } from "@headlessui/react";
-import { Label } from "recharts";
 
 export const columns = (
     handleOpenDialog: (complaint: Complaint) => void
@@ -62,6 +57,7 @@ export const columns = (
                     table.toggleAllPageRowsSelected(!!value)
                 }
                 aria-label="Select all"
+                className="bg-white data-[state=checked]:bg-green-500 data-[state=checked]:mt-1"
             />
         ),
         cell: ({ row }) => (
@@ -69,10 +65,9 @@ export const columns = (
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
                 aria-label="Select row"
+                className="data-[state=checked]:mt-1"
             />
-        ),
-        enableSorting: false,
-        enableHiding: false,
+        )
     },
     {
         accessorKey: "name",
@@ -311,57 +306,73 @@ export const columns = (
     {
         id: "actions",
         cell: ({ row }) => {
+            const [disableButton, setDisableButton] = useState(false);
+
             const handleDeleteRow = (id: number) => {
+                setDisableButton(true);
                 router.delete(route("complaint.destroy", { id }), {
                     onSuccess: () => {
                         toast.success("Baris berhasil dihapus!");
+                        setDisableButton(false);
                     },
                     onError: () => {
                         toast.error("Terjadi kesalahan saat menghapus baris.");
+                        setDisableButton(false);
                     },
                 });
             };
 
             return (
                 <>
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                                <Trash2 className="h-4 w-4 text-red-500" />{" "}
-                                {/* Ikon sampah */}
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[425px]">
-                            <div className="flex flex-col items-center justify-center">
-                                <div className="rounded-full h-14 w-14 bg-red-200 flex items-center justify-center">
-                                    <TriangleAlert className="h-8 w-8 text-red-500" />
-                                </div>
-                                <h1 className="font-bold text-lg mt-4">
-                                    Hapus Pengaduan
-                                </h1>
-                                <p className="text-gray-400 mt-2">
-                                    Apakah Anda yakin ingin menghapus ini?
-                                </p>
-                                <div className="grid grid-cols-2 mt-4 gap-x-2 w-full">
-                                    <DialogClose asChild>
-                                        <Button variant={"outline"}>
-                                            Batal
+                    <div className="flex items-center">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleOpenDialog(row.original)}
+                        >
+                            <Eye className="h-4 w-4 text-gray-800" />
+                        </Button>
+
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                    {/* Ikon sampah */}
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <div className="flex flex-col items-center justify-center">
+                                    <div className="rounded-full h-14 w-14 bg-red-200 flex items-center justify-center">
+                                        <TriangleAlert className="h-8 w-8 text-red-500" />
+                                    </div>
+                                    <h1 className="font-bold text-lg mt-4">
+                                        Hapus Pengaduan
+                                    </h1>
+                                    <p className="text-gray-400 mt-2">
+                                        Apakah Anda yakin ingin menghapus ini?
+                                    </p>
+                                    <div className="grid grid-cols-2 mt-4 gap-x-2 w-full">
+                                        <DialogClose asChild>
+                                            <Button variant={"outline"}>
+                                                Batal
+                                            </Button>
+                                        </DialogClose>
+                                        <Button
+                                            variant={"default"}
+                                            className="bg-red-500 hover:bg-red-600 active:scale-90 transition-all duration-300"
+                                            disabled={disableButton}
+                                            onClick={() =>
+                                                handleDeleteRow(row.original.id)
+                                            }
+                                            aria-label="Delete row"
+                                        >
+                                            Ya, saya yakin!
                                         </Button>
-                                    </DialogClose>
-                                    <Button
-                                        variant={"default"}
-                                        className="bg-red-500 hover:bg-red-600 active:scale-90 transition-all duration-300"
-                                        onClick={() =>
-                                            handleDeleteRow(row.original.id)
-                                        }
-                                        aria-label="Delete row"
-                                    >
-                                        Ya, saya yakin!
-                                    </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        </DialogContent>
-                    </Dialog>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
                 </>
             );
         },

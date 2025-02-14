@@ -30,7 +30,7 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <SidebarProvider className="has-[[data-variant=inset]]:bg-sirisa-primary">
+        <SidebarProvider className="has-[[data-variant=inset]]:bg-stone-700">
             <AppSidebar />
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">

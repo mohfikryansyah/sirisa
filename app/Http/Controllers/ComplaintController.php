@@ -132,27 +132,25 @@ class ComplaintController extends Controller
     public function deleteSelectedRows(Request $request)
     {
         $ids = $request->input('ids');
-// dd($ids);
+        
         if (empty($ids)) {
             return redirect()->back()->with('error', 'Tidak ada baris yang dipilih.');
         }
-        
-        $tes = Complaint::whereIn('id', $ids)->delete();
-        // dd($tes);
+
+        Complaint::whereIn('id', $ids)->delete();
 
         return redirect()->back()->with('success', 'Baris berhasil dihapus.');
     }
 
     public function search(Request $request)
     {
-        $query = $request->get('query');
+        $query = $request->get('search_query');
 
         $complaints = Complaint::where('telp', 'like', $query)->get();
 
-        dd($complaints);
-
-        return Inertia::render('Admin/Pengaduan/Index', [
+        return Inertia::render('SearchComplaint/SearchComplaint', [
             'complaints' => $complaints,
+            'query' => $query,
         ]);
     }
 }

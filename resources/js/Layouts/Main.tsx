@@ -25,6 +25,7 @@ const navbar = [
 
 export default function Main({ children }: PropsWithChildren) {
     const isDesktop = useMediaQuery("(min-width: 768px)");
+
     return (
         <div className="relative">
             {isDesktop ? (
