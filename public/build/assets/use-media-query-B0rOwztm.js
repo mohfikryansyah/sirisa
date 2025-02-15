@@ -1,1 +1,0 @@
-import{r}from"./app-DyjsqCji.js";function u(e){const[i,n]=r.useState(()=>typeof window<"u"?window.matchMedia(e).matches:!1);return r.useEffect(()=>{if(typeof window>"u")return;const t=window.matchMedia(e);function a(o){n(o.matches)}return t.addEventListener("change",a),n(t.matches),()=>t.removeEventListener("change",a)},[e]),i}export{u};

@@ -14,6 +14,11 @@ import gelombangJson from "@/data/GEA.json";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Marker, Popup, GeoJSON, useMapEvents } from "react-leaflet";
+import { Input } from "@/Components/ui/input";
+import toast from "react-hot-toast";
+import FilterBencana from "./FilterBencana/FilterBencana";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { X } from "lucide-react";
 
 const getColorCategory = (type: string, value: string) => {
     const colors: Record<string, Record<string, string>> = {
@@ -71,10 +76,19 @@ const dataGempa: any = gempaJson;
 const dataGelombang: any = gelombangJson;
 
 export default function BencanaMap() {
-    const [showGelombang, setShowGelombang] = useState(true);
-    const [showGempa, setShowGempa] = useState(true);
-    const [showBanjir, setShowBanjir] = useState(true);
-    const [showTanahLongsor, setShowTanahLongsor] = useState(true);
+    const [disasterStates, setDisasterStates] = useState({
+        showGelombang: true,
+        showGempa: true,
+        showBanjir: true,
+        showTanahLongsor: true,
+    });
+
+    const toggleDisasterState = (key: keyof typeof disasterStates) => {
+        setDisasterStates((prev) => ({
+            ...prev,
+            [key]: !prev[key],
+        }));
+    };
 
     const [selectedFeature, setSelectedFeature] = useState<{
         position: [number, number];
@@ -82,6 +96,53 @@ export default function BencanaMap() {
         category: string;
         sumber: string;
     } | null>(null);
+
+    const [userUploadMap, setUserUploadMap] = useState<any>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (file.type !== "application/json" && !file.name.endsWith(".json")) {
+            toast.error("Hanya file JSON yang diperbolehkan!");
+            e.target.value = "";
+            return;
+        }
+
+        setSelectedFile(file);
+    };
+
+    const handleUpload = () => {
+        if (!selectedFile) {
+            toast.error("Pilih file JSON terlebih dahulu!");
+            return;
+        }
+
+        if (userUploadMap) {
+            setUserUploadMap(null);
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const json = JSON.parse(event.target?.result as string);
+                setUserUploadMap(json);
+                toast.success("File berhasil diunggah!");
+            } catch (error) {
+                toast.error("File bukan JSON yang valid!");
+            }
+        };
+
+        reader.readAsText(selectedFile);
+    };
+
+    const handleResetUploadUser = () => {
+        setSelectedFile(null);
+        setUserUploadMap(null);
+        const fileInput = document.getElementById("file_peta") as HTMLInputElement;
+        if (fileInput) fileInput.value = "";
+    };
 
     function onEachFeature(
         type: "banjir" | "tanahLongsor" | "gempa" | "gelombang"
@@ -115,92 +176,91 @@ export default function BencanaMap() {
         });
 
         return null;
-    }
+    };
 
     const openPopup = (e: L.LeafletEvent) => {
         e.target.openPopup();
-    }
+    };
+
+    const isDesktop = useMediaQuery("(min-width: 768px)");
 
     return (
-        <div className="w-full px-4">
+        <section id="map" className="w-full px-4 pt-32">
             <div className="max-w-for-monitor mx-auto">
-                <h1>Peta dengan GeoJSON</h1>
-                <div className="flex space-x-10 max-w-fit w-full mx-auto my-10">
-                    <div className="flex items-center space-x-2">
-                        <Checkbox
-                            onCheckedChange={() => {
-                                setShowTanahLongsor(!showTanahLongsor);
-                                setSelectedFeature(null);
-                            }}
-                            checked={showTanahLongsor}
-                            id="tanahLongsor"
+                <h1 className="mb-10 text-center text-2xl font-extrabold lg:text-4xl text-sirisa-primary">
+                    Peta Kawasan Rawan Bencana
+                </h1>
+                <div className={cn(!isDesktop && "mb-3")}>
+                    <Label htmlFor="file_peta" className="ml-0.5 mb-2 block">
+                        Peta Anda{" "}
+                        <span className="text-gray-400 ml-1 text-xs">
+                            (ekstensi .json | Contoh: lahanbaru.json)
+                        </span>
+                    </Label>
+                    <div className="w-full md:flex items-center justify-between md:space-x-2 md:space-y-0 space-y-3">
+                        <div className="max-w-sm flex items-center space-x-2">
+                            <Input
+                                type="file"
+                                accept=".json"
+                                onChange={handleFileChange}
+                                id="file_peta"
+                                className="h-10"
+                            />
+                            <Button
+                                type="submit"
+                                className="h-10"
+                                onClick={handleUpload}
+                            >
+                                Submit
+                            </Button>
+                            {userUploadMap  && (
+                                <Button
+                                    variant="ghost"
+                                    onClick={handleResetUploadUser}
+                                    className="h-9 px-2 lg:px-3"
+                                >
+                                    Reset
+                                    <X />
+                                </Button>
+                            )}
+                        </div>
+                        <FilterBencana
+                            disasterStates={disasterStates}
+                            toggleDisasterState={toggleDisasterState}
                         />
-                        <Label htmlFor="tanahLongsor">Tanah Longsor</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox
-                            onCheckedChange={() => {
-                                setShowBanjir(!showBanjir);
-                                setSelectedFeature(null);
-                            }}
-                            checked={showBanjir}
-                            id="banjir"
-                        />
-                        <Label htmlFor="banjir">Banjir</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox
-                            onCheckedChange={() => {
-                                setShowGempa(!showGempa);
-                                setSelectedFeature(null);
-                            }}
-                            checked={showGempa}
-                            id="gempa"
-                        />
-                        <Label htmlFor="gempa">Gempa</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox
-                            onCheckedChange={() => {
-                                setShowGelombang(!showGelombang);
-                                setSelectedFeature(null);
-                            }}
-                            checked={showGelombang}
-                            id="gelombang"
-                        />
-                        <Label htmlFor="gelombang">
-                            Gelombang Ekstrim Abrasi
-                        </Label>
                     </div>
                 </div>
                 <MapWithGeoJson
-                    className="overflow-hidden rounded-xl"
+                    className="overflow-hidden rounded-xl mt-5"
                     height="600px"
                     zoom={12}
                 >
                     <MapClickHandler />
-                    {showBanjir && (
+                    {userUploadMap && (
+                        <GeoJSON data={userUploadMap} style={style} />
+                    )}
+                    {disasterStates.showBanjir && (
                         <GeoJSON
                             data={dataBanjir}
                             style={style}
                             onEachFeature={onEachFeature("banjir")}
                         />
                     )}
-                    {showTanahLongsor && (
+                    {disasterStates.showTanahLongsor && (
                         <GeoJSON
                             data={dataTanahLongsor}
                             style={style}
                             onEachFeature={onEachFeature("tanahLongsor")}
                         />
                     )}
-                    {showGempa && (
+                    {disasterStates.showGempa && (
                         <GeoJSON
                             data={dataGempa}
                             style={style}
                             onEachFeature={onEachFeature("gempa")}
                         />
                     )}
-                    {showGelombang && (
+                    {disasterStates.showGelombang && (
                         <GeoJSON
                             data={dataGelombang}
                             style={style}
@@ -275,6 +335,6 @@ export default function BencanaMap() {
                     )}
                 </MapWithGeoJson>
             </div>
-        </div>
+        </section>
     );
 }
