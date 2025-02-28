@@ -354,7 +354,6 @@ function Form({
                                             toast.success(
                                                 "Lokasi berhasil diambil!"
                                             );
-                                            console.log(latitude, longitude);
                                         },
                                         (error) => {
                                             toast.error(

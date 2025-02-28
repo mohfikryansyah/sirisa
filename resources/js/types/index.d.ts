@@ -1,6 +1,7 @@
 export interface User {
     id: number;
     name: string;
+    avatar: string;
     email: string;
     email_verified_at?: string;
 }
@@ -59,6 +60,21 @@ export interface Status {
     icon: LucideIcon;
     color: string;
 };
+
+export interface PopupMap {
+    position: [number, number];
+    type: "banjir" | "tanahLongsor" | "gempa" | "gelombang";
+    category: string;
+    sumber: string;
+}
+
+export interface GeoLocation {
+    id: number;
+    title: string;
+    path: string;
+    geo_json_data: any;
+    created_at: string;
+}
 
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,

@@ -25,23 +25,19 @@ import {
 import MyCard from "@/Components/ui/mycard";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Header from "./parts/Header";
-import UsaPopulationMap from "./parts/Map";
 import TujuanDanManfaat from "./parts/TujuanDanManfaat";
-import { GlobeDemo } from "./parts/Globe";
 import Risiko from "./parts/Risiko";
 import Footer from "./parts/Footer";
-import BencanaMap from "./parts/BencanaMap";
+import BencanaMap from "./Peta/PetaBencana";
 
-export default function Home() {
+export default function LandingPage() {
     return (
         <Main>
             <Head title="Balai Pemantapan Kawasan Hutan dan Tata Lingkungan XV Gorontalo" />
             <Header />
             <WhyUs />
-            {/* <GlobeDemo /> */}
             <Risiko />
             <BencanaMap />
-            {/* <UsaPopulationMap /> */}
             <Footer />
         </Main>
     );

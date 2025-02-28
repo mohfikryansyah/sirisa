@@ -4,8 +4,10 @@ import * as React from "react";
 import {
     BookOpen,
     Bot,
+    CheckCircle,
     Command,
     Frame,
+    LayoutGrid,
     LifeBuoy,
     Map,
     PieChart,
@@ -38,98 +40,25 @@ const data = {
     },
     navMain: [
         {
-            title: "Data APJ",
-            url: "#",
-            icon: SquareTerminal,
-            isActive: true,
-            items: [
-                {
-                    title: "Konvensional",
-                    url: "/user/index",
-                },
-                {
-                    title: "LED",
-                    url: "/profile",
-                },
-                {
-                    title: "PJUTS",
-                    url: "#",
-                },
-                {
-                    title: "Jumlah APJ Kota Gorontalo",
-                    url: "#",
-                },
-                {
-                    title: "Rekening APJ Kota Gorontalo",
-                    url: "#",
-                },
-            ],
+            title: "Dashboard",
+            url: route("dashboard"),
+            icon: LayoutGrid,
         },
         {
-            title: "Data Panel",
-            url: "#",
-            icon: Bot,
-            items: [
-                {
-                    title: "Paska Bayar",
-                    url: "#",
-                },
-                {
-                    title: "Prabayar",
-                    url: "#",
-                },
-                {
-                    title: "Panel Kota Gorontalo",
-                    url: "#",
-                },
-            ],
+            title: "Pengaturan Akun",
+            url: route("profile.edit"),
+            icon: SquareTerminal,
         },
-        // {
-        //     title: "Documentation",
-        //     url: "#",
-        //     icon: BookOpen,
-        //     items: [
-        //         {
-        //             title: "Introduction",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Get Started",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Tutorials",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Changelog",
-        //             url: "#",
-        //         },
-        //     ],
-        // },
-        // {
-        //     title: "Settings",
-        //     url: "#",
-        //     icon: Settings2,
-        //     items: [
-        //         {
-        //             title: "General",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Team",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Billing",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Limits",
-        //             url: "#",
-        //         },
-        //     ],
-        // },
+        {
+            title: "Data Peta",
+            url: route("geo-location.index"),
+            icon: Map,
+        },
+        {
+            title: "Data Pengaduan",
+            url: route("complaint.index"),
+            icon: CheckCircle,
+        }
     ],
     navSecondary: [
         {
@@ -209,8 +138,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarHeader>
             <SidebarContent className="bg-stone-700 text-white">
                 <NavMain items={data.navMain} />
-                <NavProjects projects={data.projects} />
-                <NavSecondary items={data.navSecondary} className="mt-auto" />
+                {/* <NavProjects projects={data.projects} />
+                <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
             </SidebarContent>
             <SidebarFooter className="bg-stone-700 text-white">
                 <NavUser />

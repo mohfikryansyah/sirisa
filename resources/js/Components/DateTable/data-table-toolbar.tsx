@@ -97,8 +97,8 @@ export function TableToolbar<TData>({
                     className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                 /> */}
 
-                <Input
-                    placeholder="Filter emails..."
+                {/* <Input
+                    placeholder="Filter Nama..."
                     value={table.getColumn("Nama")?.getFilterValue() as string}
                     onChange={(e) => {
                         table
@@ -106,9 +106,9 @@ export function TableToolbar<TData>({
                             ?.setFilterValue(e.target.value);
                     }}
                     className="max-w-sm"
-                />
+                /> */}
 
-                {table.getColumn("Status") && (
+                {/* {table.getColumn("Status") && (
                     <DataTableFacetedFilter
                         column={table.getColumn("Status")}
                         title="Status"
@@ -116,7 +116,7 @@ export function TableToolbar<TData>({
                         resetFilter={resetFilter}
                         onResetComplete={handleResetComplete}
                     />
-                )}
+                )} */}
 
                 {(isFilteredTitle || isFilteredGlobal) && (
                     <Button

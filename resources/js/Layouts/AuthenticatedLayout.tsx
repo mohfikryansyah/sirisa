@@ -30,7 +30,7 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <SidebarProvider className="has-[[data-variant=inset]]:bg-stone-700">
+        <SidebarProvider className="has-[[data-variant=inset]]:bg-stone-700" data-lenis-prevent>
             <AppSidebar />
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
@@ -57,7 +57,7 @@ export default function Authenticated({
                         </Breadcrumb>
                     </div>
                 </header>
-                <main className="p-4 pt-0">{children}</main>
+                <main className="p-4 pt-0" data-lenis-prevent>{children}</main>
             </SidebarInset>
         </SidebarProvider>
     );

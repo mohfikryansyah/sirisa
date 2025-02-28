@@ -65,21 +65,7 @@ export default function Header() {
             </div>
             <div className="w-full lg:grid grid-cols-4 items-center justify-center h-full">
                 <div className="xl:block hidden">
-                    {showTips && (
-                        <>
-                            <BubbleText className="top-[15%] left-28">
-                                Dilarang menebang pohon tanpa izin resmi.
-                            </BubbleText>
-                            <BubbleText className="top-[44%] left-10">
-                                Pastikan api benar-benar padam setelah
-                                digunakan.
-                            </BubbleText>
-                            <BubbleText className="top-[75%] left-20">
-                                Lindungi ekosistem dengan tidak merusaknya.
-                            </BubbleText>
-                        </>
-                    )}
-                    <Card className="bg-[#fef18c] shadow-lg pl-5 py-2 border-[#fef18c] h-[20rem] ml-32 w-[18rem] relative rotate-6 hover:scale-105 transition duration-300">
+                    <Card className="bg-[#fef18c] shadow-lg pl-5 py-2 border-[#fef18c] h-[20rem] ml-[8vw] w-[18rem] relative rotate-6 hover:scale-105 transition duration-300">
                         <div className="flex flex-col items-center -mt-6 absolute left-0 right-0 w-full">
                             <div className="rounded-full z-10 h-5 w-5 bg-red-500 bg-radial-gradient"></div>
                             <div className="h-6 w-[0.1rem] -mt-2 rounded-lg bg-black"></div>
@@ -92,17 +78,16 @@ export default function Header() {
                 </div>
                 <div className="w-full h-full col-start-2 col-span-2 flex flex-col md:gap-4 items-center md:relative absolute justify-center z-10">
                     <div className="md:max-w-md max-w-xs w-full px-4 md:px-0 md:mb-0 mb-4">
-                        {/* {error && <p className="text-destructive text-base mb-2">{error}</p>} */}
                         <PlaceholdersAndVanishInput
                             placeholders={placeholders}
                             onChange={handleChange}
                             onSubmit={onSubmit}
                         />
                     </div>
-                    <h1 className="inline-block max-w-5xl bg-gradient-to-r from-blue-500 via-green-500 to-sirisa-primary bg-clip-text text-center text-2xl font-bold text-transparent md:py-2 md:text-6xl">
+                    <h1 className="inline-block max-w-5xl bg-gradient-to-r from-blue-500 via-green-500 to-sirisa-primary bg-clip-text text-center text-2xl font-bold text-transparent md:py-2 md:text-6xl whitespace-nowrap">
                         Lindungi Sumber Daya Alam
                     </h1>
-                    <h1 className="text-center text-2xl md:py-0 py-2 font-bold text-gray-700 md:text-[3.5rem] md:px-0 px-5 inline-block max-w-5xl leading-[1]">
+                    <h1 className="text-center text-2xl md:py-0 py-2 font-bold text-gray-700 md:text-[3.5rem] md:px-0 px-5 inline-block max-w-5xl leading-[1] whitespace-nowrap">
                         Bersama Lindungi Bumi Kita
                     </h1>
                     <p className="mx-auto md:max-w-xl max-w-xs md:mt-4 text-center text-lg font-medium text-gray-700 md:w-2/3">
@@ -118,22 +103,6 @@ export default function Header() {
                         </a>
                         <ComplaintForm />
                     </div>
-                </div>
-                <div className="xl:block hidden">
-                    {showTips && (
-                        <>
-                            <BubbleText className="top-[10%] right-35">
-                                Jangan membakar hutan atau lahan.
-                            </BubbleText>
-                            <BubbleText className="top-[40%] right-10">
-                                Gunakan sumber daya alam secara bijak dan
-                                bertanggung jawab.
-                            </BubbleText>
-                            <BubbleText className="top-[70%] right-32">
-                                Pelihara lingkungan dengan menanam pohon
-                            </BubbleText>
-                        </>
-                    )}
                 </div>
             </div>
         </div>

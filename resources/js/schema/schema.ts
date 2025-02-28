@@ -34,3 +34,8 @@ export const searchComplaintSchema = z.string()
     .min(10, { message: "Nomor telp harus memiliki minimal 10 karakter" })
     .max(14, { message: "Nomor telp harus memiliki maksimal 14 karakter" })
     .regex(/^\d+$/, { message: "Nomor telp hanya boleh berisi angka" });
+
+export const GeoLocationFormSchema = z.object({
+    path: z.array(z.instanceof(File)),
+    title: z.string().nonempty(),
+});

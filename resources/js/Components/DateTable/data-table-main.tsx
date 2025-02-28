@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
                 table={table}
                 globalFilter={globalFilter}
                 setGlobalFilter={setGlobalFilter}
-                filter={filter}
+                // filter={filter}
             />
             <TableContent table={table} columns={columns} />
             <TablePagination table={table} />

@@ -1,11 +1,13 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 // import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
 import { Upload } from "lucide-react";
+import toast from "react-hot-toast";
+import { set } from "zod";
 
 const mainVariant = {
   initial: {
@@ -30,8 +32,16 @@ const secondaryVariant = {
 
 export const FileUpload = ({
   onChange,
+  multiple,
+  accept,
+  resetFileUpload,
+  setResetFileUpload
 }: {
   onChange?: (files: File[]) => void;
+  multiple?: boolean;
+  accept?: string;
+  resetFileUpload?: boolean;
+  setResetFileUpload?: (value: boolean) => void;
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -41,16 +51,26 @@ export const FileUpload = ({
     onChange && onChange(newFiles);
   };
 
+  useEffect(() => {
+    if (resetFileUpload === true) {
+      setFiles([]);
+      setResetFileUpload && setResetFileUpload(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+    }
+    }
+  }, [resetFileUpload]);
+
   const handleClick = () => {
     fileInputRef.current?.click();
   };
 
   const { getRootProps, isDragActive } = useDropzone({
-    multiple: true,
+    multiple: false,
     noClick: true,
     onDrop: handleFileChange,
     onDropRejected: (error) => {
-      console.log(error);
+      toast.error("Terjadi Kesalahan: " + error[0].errors[0].message);
     },
   });
 
@@ -65,7 +85,8 @@ export const FileUpload = ({
           ref={fileInputRef}
           id="file-upload-handle"
           type="file"
-          multiple
+          accept={accept}
+          {...(multiple && { multiple: true })}
           onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
           className="hidden"
         />
