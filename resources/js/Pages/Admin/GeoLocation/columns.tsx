@@ -11,22 +11,24 @@ export const columns: ColumnDef<GeoLocation>[] = [
     {
         accessorKey: "id",
         header: "No.",
+        cell: ({ row }) => row.index + 1,
     },
     {
         accessorKey: "title",
         id: "Judul Peta",
         header: "Judul Peta",
     },
-    {
-        accessorKey: "path",
-        header: "Path",
-    },
+    // {
+    //     accessorKey: "path",
+    //     header: "Path",
+    // },
     {
         accessorKey: "created_at",
         header: "Dibuat",
     },
     {
         id: "actions",
+        header: "Aksi",
         cell: ({ row }) => {
             const [disableButton, setDisableButton] = useState<boolean>(false);
             const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);

@@ -11,7 +11,7 @@ use App\Http\Controllers\LandingPageController;
 use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
-Route::get('/peta', [LandingPageController::class, 'peta'])->name('peta');
+Route::get('/peta-kawasan-rawan-bencana', [LandingPageController::class, 'peta'])->name('landing-page.peta.krb');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

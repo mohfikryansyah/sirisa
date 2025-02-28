@@ -37,7 +37,7 @@ export default function LandingPage() {
             <Header />
             <WhyUs />
             <Risiko />
-            <BencanaMap />
+            {/* <BencanaMap /> */}
             <Footer />
         </Main>
     );

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\GeoLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,7 @@ class LandingPageController extends Controller
 
     public function peta()
     {
-        return Inertia::render('LandingPage/Peta/PetaBencana');
+        $geoLocations = GeoLocation::all();
+        return Inertia::render('LandingPage/Peta/Pages', compact('geoLocations'));
     }   
 }

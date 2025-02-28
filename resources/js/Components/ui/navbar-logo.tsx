@@ -1,6 +1,7 @@
+import { cn } from "@/lib/utils";
 import { Link } from "@inertiajs/react";
 
-export default function NavbarLogo({logoRef}: {logoRef?: any}) {
+export default function NavbarLogo({logoRef, textColor}: {logoRef?: any, textColor?: string}) {
     return (
         <Link
             href="/"
@@ -11,7 +12,7 @@ export default function NavbarLogo({logoRef}: {logoRef?: any}) {
                 className="w-9 h-auto"
                 alt="Flowbite Logo"
             />
-            <div ref={logoRef} className="-space-y-1 text-neutral-700">
+            <div ref={logoRef} className={cn("-space-y-1 text-neutral-700", textColor)}>
                 <p className="self-center text-xl font-bold whitespace-nowrap">
                     BPKHTL XV
                 </p>

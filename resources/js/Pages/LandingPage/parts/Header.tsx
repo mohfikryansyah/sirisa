@@ -97,7 +97,7 @@ export default function Header() {
                     <div className="flex gap-3 items-center justify-center md:mt-3 mt-5">
                         <a
                             className="rounded-xl bg-[#187f80] px-4 py-3 font-medium text-white"
-                            href="#map"
+                            href={route("landing-page.peta.krb")}
                         >
                             Lihat Peta
                         </a>

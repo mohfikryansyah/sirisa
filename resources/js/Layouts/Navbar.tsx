@@ -14,7 +14,14 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import NavbarLogo from "@/Components/ui/navbar-logo";
 
-export default function Navbar({navbar}: {navbar: {label: string, url: string}[]}) {
+export default function Navbar({
+    navbar,
+    navbarClassName,
+    textColor,
+}: { navbar: { label: string; url: string }[] } & {
+    navbarClassName?: string;
+    textColor?: string;
+}) {
     const { auth } = usePage<PageProps>().props;
     const [scrollY, setScrollY] = useState<number>(0);
     const navbarRef = useRef<HTMLElement | null>(null);
@@ -52,14 +59,15 @@ export default function Navbar({navbar}: {navbar: {label: string, url: string}[]
         <nav
             ref={navbarRef}
             className={cn(
-                "fixed w-full z-[121] top-0 lg:px-12 px-6 duration-300 transition-all mt-3"
+                "fixed w-full z-[121] top-0 lg:px-12 px-6 duration-300 transition-all mt-3",
+                navbarClassName
             )}
         >
             <div
                 ref={navbarItemRef}
                 className="max-w-for-monitor flex flex-wrap items-center justify-between mx-auto py-3 duration-300 transition-all"
             >
-                <NavbarLogo logoRef={logoRef} />
+                <NavbarLogo logoRef={logoRef} textColor={textColor} />
 
                 <Sheet>
                     <SheetTrigger asChild>
@@ -88,7 +96,9 @@ export default function Navbar({navbar}: {navbar: {label: string, url: string}[]
                                     />
                                     <div
                                         ref={logoRef}
-                                        className="-space-y-1 text-neutral-700"
+                                        className={cn(
+                                            "-space-y-1 text-neutral-700"
+                                        )}
                                     >
                                         <p className="self-center text-xl font-bold whitespace-nowrap">
                                             BPKHTL XV
@@ -105,7 +115,9 @@ export default function Navbar({navbar}: {navbar: {label: string, url: string}[]
                                         <li key={index}>
                                             <a
                                                 href={nav.url}
-                                                className="block text-neutral-500 font-semibold hover:text-blue-400 transition-all duration-300"
+                                                className={cn(
+                                                    "block text-neutral-500 font-semibold hover:text-blue-400 transition-all duration-300"
+                                                )}
                                                 aria-current="page"
                                             >
                                                 {nav.label}
@@ -152,7 +164,7 @@ export default function Navbar({navbar}: {navbar: {label: string, url: string}[]
                             <li key={index}>
                                 <a
                                     href={nav.url}
-                                    className="block text-neutral-500 font-semibold rounded md:bg-transparent md:p-0 hover:text-blue-400 transition-all duration-300"
+                                    className={cn("block text-neutral-500 font-semibold rounded md:bg-transparent md:p-0 hover:text-blue-400 transition-all duration-300", textColor)}
                                     aria-current="page"
                                 >
                                     {nav.label}
