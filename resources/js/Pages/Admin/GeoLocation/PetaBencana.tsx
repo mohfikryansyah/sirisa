@@ -7,7 +7,7 @@ import { Label } from "@/Components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import { Search } from "lucide-react";
+import { ExternalLinkIcon, Fullscreen, RefreshCcwDotIcon, Search } from "lucide-react";
 import seedrandom from "seedrandom";
 import MapWithGeoJson from "@/Components/ui/MapWithGeoJson";
 import { GeoJSON, useMap } from "react-leaflet";
@@ -153,8 +153,9 @@ export default function PetaBencana({
                         href={`https://maps.google.com/maps?q=${lat},${lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="inline-flex items-center text-blue-400 hover:underline"
                     >
-                        Lihat di Google Maps
+                        Lihat di Google Maps <ExternalLinkIcon className="w-4 h-4 ml-1"/>
                     </a>
                 </div>
             </>
@@ -301,14 +302,141 @@ export default function PetaBencana({
     const allVisible = visibleCount === geoLocations.length;
     const noneVisible = visibleCount === 0;
 
+    const resetZoomLevel = () => {
+        mapRef.current?.setZoom(12);
+    };
+
+    const handleZoomIn = () => {
+        mapRef.current?.zoomIn();
+    };
+
+    const handleZoomOut = () => {
+        mapRef.current?.zoomOut();
+    };
+
+    const handleFullscreen = () => {
+        if (mapRef.current) {
+            const mapContainer = mapRef.current.getContainer();
+            if (!document.fullscreenElement) {
+                mapContainer.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    };
+
     return (
-        <div className="grid grid-cols-12 gap-4">
-            <Card className="mt-5 col-span-2">
+        <div className="md:grid grid-cols-12 gap-4">
+            <Card className="col-span-2 overflow-y-auto">
                 <CardHeader>
                     <CardTitle>Tools</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4 border-b-2 border-gray-100 pb-5">
+                        <div className="w-full border-b-2 border-gray-100 pb-4">
+                            <h1 className="font-medium mb-2">Zoom</h1>
+                            <div className="flex justify-between items-center ">
+                                <Button
+                                    onClick={handleZoomIn}
+                                    className="zoom-button"
+                                    title="Perbesar"
+                                >
+                                    +
+                                </Button>
+
+                                <span className="px-3">In/Out</span>
+
+                                <Button
+                                    onClick={handleZoomOut}
+                                    className="zoom-button "
+                                    title="Perkecil"
+                                >
+                                    -
+                                </Button>
+                            </div>
+                            <Button
+                                onClick={resetZoomLevel}
+                                className="w-full mt-2"
+                                title="Reset Zoom"
+                            >
+                                <RefreshCcwDotIcon />
+                                Reset Zoom
+                            </Button>
+
+                            <Button
+                                onClick={handleFullscreen}
+                                className="w-full mt-2"
+                                title="Fullscreen"
+                            >
+                                <Fullscreen />
+                                Fullscreen
+                            </Button>
+                        </div>
+                        <div className="border-b-2 border-gray-100 pb-5">
+                            <Popover>
+                                <h1 className="font-medium mb-2">
+                                    Filter Peta KRB
+                                </h1>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="default"
+                                        className="w-full"
+                                    >
+                                        Pilih Peta
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                    className="w-full popover-content-width-same-as-its-trigger p-2 mt-1"
+                                    side="bottom"
+                                    align="start"
+                                >
+                                    <div className="flex flex-col gap-2">
+                                        {/* Tombol Toggle Semua */}
+                                        <button
+                                            onClick={() =>
+                                                toggleAllMaps(!allVisible)
+                                            }
+                                            className={cn(
+                                                "w-full px-4 py-2 rounded-md text-sm font-medium transition-all",
+                                                allVisible
+                                                    ? "bg-[#187f80] text-white"
+                                                    : "hover:bg-gray-100 text-gray-700"
+                                            )}
+                                        >
+                                            {allVisible
+                                                ? "Sembunyikan Semua"
+                                                : "Tampilkan Semua"}
+                                        </button>
+
+                                        {/* Daftar Peta */}
+                                        {geoLocations.map((geoLocation) => {
+                                            const isActive =
+                                                visibleMaps[geoLocation.id];
+
+                                            return (
+                                                <button
+                                                    key={geoLocation.id}
+                                                    onClick={() =>
+                                                        toggleMapVisibility(
+                                                            geoLocation.id
+                                                        )
+                                                    }
+                                                    className={cn(
+                                                        "flex items-center justify-start w-full px-4 py-2 rounded-md text-sm font-medium transition-all",
+                                                        isActive
+                                                            ? "bg-[#187f80] text-white"
+                                                            : "hover:bg-gray-100 text-gray-700"
+                                                    )}
+                                                >
+                                                    {geoLocation.title ||
+                                                        `Peta ${geoLocation.id}`}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
                         <h1 className="font-medium">Cari Lokasi</h1>
                         <div>
                             <Label htmlFor="latitude">Latitude</Label>
@@ -338,61 +466,10 @@ export default function PetaBencana({
                             </Button>
                         </div>
                     </div>
-
-                    <Popover>
-                    <h1 className="font-medium mt-5 mb-3">Filter Peta KRB</h1>
-                        <PopoverTrigger asChild>
-                            <Button variant="outline">Pilih Peta</Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-60 p-2 mt-0.5" side="bottom" align="start">
-                            <div className="flex flex-col gap-2">
-                                {/* Tombol Toggle Semua */}
-                                <button
-                                    onClick={() => toggleAllMaps(!allVisible)}
-                                    className={cn(
-                                        "w-full px-4 py-2 rounded-md text-sm font-medium transition-all",
-                                        allVisible
-                                            ? "bg-[#187f80] text-white"
-                                            : "hover:bg-gray-100 text-gray-700"
-                                    )}
-                                >
-                                    {allVisible
-                                        ? "Sembunyikan Semua"
-                                        : "Tampilkan Semua"}
-                                </button>
-
-                                {/* Daftar Peta */}
-                                {geoLocations.map((geoLocation) => {
-                                    const isActive =
-                                        visibleMaps[geoLocation.id];
-
-                                    return (
-                                        <button
-                                            key={geoLocation.id}
-                                            onClick={() =>
-                                                toggleMapVisibility(
-                                                    geoLocation.id
-                                                )
-                                            }
-                                            className={cn(
-                                                "flex items-center justify-start w-full px-4 py-2 rounded-md text-sm font-medium transition-all",
-                                                isActive
-                                                    ? "bg-[#187f80] text-white"
-                                                    : "hover:bg-gray-100 text-gray-700"
-                                            )}
-                                        >
-                                            {geoLocation.title ||
-                                                `Peta ${geoLocation.id}`}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </PopoverContent>
-                    </Popover>
                 </CardContent>
             </Card>
 
-            <Card className="mt-5 col-span-2 order-3 overflow-y-auto max-h-[600px]">
+            <Card className="col-span-2 order-3 overflow-y-auto">
                 <CardHeader>
                     <CardTitle>Legend</CardTitle>
                 </CardHeader>
@@ -400,11 +477,13 @@ export default function PetaBencana({
                     {geoLocations
                         .filter((geoLocation) => visibleMaps[geoLocation.id])
                         .map((geoLocation) => (
-                            <div key={geoLocation.id} className="mb-2">
-                                <h3 className="font-medium">
-                                    {geoLocation.title ||
-                                        `Peta ${geoLocation.id}`}
-                                </h3>
+                            <div key={geoLocation.id} className="mb-2 pb-3">
+                                <div className="border-b-2 border-gray-100 mb-2">
+                                    <h3 className="font-medium mb-1">
+                                        {geoLocation.title ||
+                                            `Peta ${geoLocation.id}`}
+                                    </h3>
+                                </div>
                                 <div className="flex flex-wrap items-center gap-3">
                                     {colorMap[geoLocation.id]?.map(
                                         (color, index) => (
@@ -441,9 +520,9 @@ export default function PetaBencana({
             </Card>
 
             <MapWithGeoJson
-                className="overflow-hidden rounded-xl mt-5 col-span-8"
-                height="600px"
+                className="overflow-hidden rounded-xl col-span-8 h-full shadow-xl"
                 zoom={12}
+                mapRef={mapRef}
             >
                 <MapController onMapReady={handleMapReady} />
 

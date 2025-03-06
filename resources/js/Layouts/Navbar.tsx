@@ -18,9 +18,11 @@ export default function Navbar({
     navbar,
     navbarClassName,
     textColor,
+    backgroundLogo,
 }: { navbar: { label: string; url: string }[] } & {
     navbarClassName?: string;
     textColor?: string;
+    backgroundLogo?: string;
 }) {
     const { auth } = usePage<PageProps>().props;
     const [scrollY, setScrollY] = useState<number>(0);
@@ -67,7 +69,7 @@ export default function Navbar({
                 ref={navbarItemRef}
                 className="max-w-for-monitor flex flex-wrap items-center justify-between mx-auto py-3 duration-300 transition-all"
             >
-                <NavbarLogo logoRef={logoRef} textColor={textColor} />
+                <NavbarLogo logoRef={logoRef} textColor={textColor} backgroundLogo={backgroundLogo} />
 
                 <Sheet>
                     <SheetTrigger asChild>

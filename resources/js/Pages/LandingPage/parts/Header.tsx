@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/Components/ui/button";
 import { ComplaintForm } from "../Form/ComplaintForm";
 import { PlaceholdersAndVanishInput } from "@/Components/ui/placeholder-and-vanish-input";
-import { router } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import toast from "react-hot-toast";
 import { searchComplaintSchema } from "@/schema/schema";
 import { z } from "zod";
@@ -95,12 +95,13 @@ export default function Header() {
                         depan lingkungan.
                     </p>
                     <div className="flex gap-3 items-center justify-center md:mt-3 mt-5">
-                        <a
+                        <Link
+                            prefetch
                             className="rounded-xl bg-[#187f80] px-4 py-3 font-medium text-white"
                             href={route("landing-page.peta.krb")}
                         >
                             Lihat Peta
-                        </a>
+                        </Link>
                         <ComplaintForm />
                     </div>
                 </div>

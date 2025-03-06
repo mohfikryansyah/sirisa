@@ -57,7 +57,7 @@ export default function Authenticated({
                         </Breadcrumb>
                     </div>
                 </header>
-                <main className="p-4 pt-0" data-lenis-prevent>{children}</main>
+                <main className="p-4 pt-0 w-full overflow-hidden" data-lenis-prevent>{children}</main>
             </SidebarInset>
         </SidebarProvider>
     );

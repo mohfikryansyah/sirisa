@@ -8,35 +8,36 @@ import { cn } from "@/lib/utils";
 const navbar = [
     {
         url: "/",
-        label: "Home",
-    },
-    {
-        url: "#about",
-        label: "About",
+        label: "Beranda",
     },
     {
         url: "#whyus",
-        label: "WhyUs",
+        label: "Statistik",
     },
     {
-        url: "#",
-        label: "About",
+        url: "#risiko",
+        label: "Risiko",
     },
+    // {
+    //     url: "#",
+    //     label: "About",
+    // },
 ];
 
 type PageProps = {
     className?: string;
     navbarClassName?: string;
     textColor?: string;
+    backgroundLogo?: string;
 };
 
-export default function Main({ children, className, navbarClassName, textColor }: PropsWithChildren<PageProps>) {
+export default function Main({ children, className, navbarClassName, textColor, backgroundLogo }: PropsWithChildren<PageProps>) {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
     return (
         <div className={cn("relative", className)}>
             {isDesktop ? (
-                <Navbar navbar={navbar} navbarClassName={navbarClassName} textColor={textColor} />
+                <Navbar navbar={navbar} navbarClassName={navbarClassName} textColor={textColor} backgroundLogo={backgroundLogo} />
             ) : (
                 <>
                     <Navbar navbar={navbar}/>

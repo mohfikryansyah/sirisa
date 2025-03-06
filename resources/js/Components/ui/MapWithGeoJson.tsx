@@ -43,16 +43,20 @@ export default function MapWithGeoJson({
     ];
 
     return (
-        <div className={className} style={{ height }}>
+        <div className={className} 
+        // style={{ height }}
+        >
             <MapContainer
                 center={center}
                 zoom={zoom}
+                zoomControl={false}
                 minZoom={11}
                 className="z-10"
                 style={{ height: "100%", width: "100%" }}
                 maxBounds={maxBounds}
                 maxBoundsViscosity={1.0}
                 ref={mapRef}
+                
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {children}

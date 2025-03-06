@@ -56,7 +56,7 @@ export const columns: ColumnDef<GeoLocation>[] = [
 
                         <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
                             <DialogTrigger asChild>
-                                <Button variant="ghost" size="sm">
+                                <Button variant="ghost" size="sm" className="m-0">
                                     <Trash2 className="h-4 w-4 text-red-500" />
                                 </Button>
                             </DialogTrigger>

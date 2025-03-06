@@ -22,7 +22,7 @@ export default function GeoLocation({
 
             <PetaBencana geoLocations={geoLocations} />
 
-            <DataTable columns={columns} data={geoLocations} />
+            <DataTable columns={columns} data={geoLocations} searchColumn="Judul Peta"/>
         </AuthenticatedLayout>
     );
 }

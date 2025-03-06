@@ -85,6 +85,7 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
                 columns={columns(handleOpenDialog)}
                 data={complaints}
                 filter={statuses}
+                searchColumn="Nama"
             />
             {isDesktop ? (
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>

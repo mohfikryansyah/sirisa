@@ -2,7 +2,7 @@
 
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import { Trash2, TriangleAlert, X } from "lucide-react";
+import { Settings2, Trash2, TriangleAlert, X } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -11,7 +11,7 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useRef, useState } from "react";
 import { Complaint, Status } from "@/types";
 import { router } from "@inertiajs/react";
 import {
@@ -27,6 +27,7 @@ interface TableToolbarProps<TData> {
     globalFilter: string;
     setGlobalFilter: (value: string) => void;
     filter?: Status[];
+    searchColumn: string;
 }
 
 export function TableToolbar<TData>({
@@ -34,6 +35,7 @@ export function TableToolbar<TData>({
     globalFilter,
     setGlobalFilter,
     filter,
+    searchColumn,
 }: TableToolbarProps<TData>) {
     const isFilteredTitle = table.getState().columnFilters.length > 0;
     const isFilteredGlobal = globalFilter && globalFilter.length > 0;
@@ -46,11 +48,15 @@ export function TableToolbar<TData>({
         })) || [];
 
     const [resetFilter, setResetFilter] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     const handleResetFilters = () => {
         setGlobalFilter("");
         table.resetColumnFilters();
         setResetFilter(true);
+        if (searchInputRef.current) {
+            searchInputRef.current.value = "";
+        }
     };
 
     const handleResetComplete = () => {
@@ -97,26 +103,34 @@ export function TableToolbar<TData>({
                     className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                 /> */}
 
-                {/* <Input
+                <Input
                     placeholder="Filter Nama..."
-                    value={table.getColumn("Nama")?.getFilterValue() as string}
+                    value={
+                        table
+                            .getColumn(searchColumn)
+                            ?.getFilterValue() as string
+                    }
                     onChange={(e) => {
                         table
-                            .getColumn("Nama")
+                            .getColumn(searchColumn)
                             ?.setFilterValue(e.target.value);
                     }}
                     className="max-w-sm"
-                /> */}
-
-                {/* {table.getColumn("Status") && (
-                    <DataTableFacetedFilter
-                        column={table.getColumn("Status")}
-                        title="Status"
-                        options={status}
-                        resetFilter={resetFilter}
-                        onResetComplete={handleResetComplete}
-                    />
-                )} */}
+                    ref={searchInputRef}
+                />
+                {filter && (
+                    <>
+                        {table.getColumn("Status") && (
+                            <DataTableFacetedFilter
+                                column={table.getColumn("Status")}
+                                title="Status"
+                                options={status}
+                                resetFilter={resetFilter}
+                                onResetComplete={handleResetComplete}
+                            />
+                        )}
+                    </>
+                )}
 
                 {(isFilteredTitle || isFilteredGlobal) && (
                     <Button
@@ -134,7 +148,8 @@ export function TableToolbar<TData>({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            Columns
+                            <Settings2 />
+                            View
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
