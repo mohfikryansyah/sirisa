@@ -29,6 +29,7 @@ export interface ComplaintStatus {
     complaint_id: number;
     status: string;
     note: string;
+    created_at: string;
 }
 
 export interface ComplaintFile {

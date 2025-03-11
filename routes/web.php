@@ -8,12 +8,17 @@ use Illuminate\Foundation\Application;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\Exports\ExportComplaintController;
 use App\Http\Controllers\GeoLocationController;
 use App\Http\Controllers\LandingPageController;
 use App\Models\Complaint;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 Route::get('/peta-kawasan-rawan-bencana', [LandingPageController::class, 'peta'])->name('landing-page.peta.krb');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/export-complaint', [ExportComplaintController::class, 'export'])->name('complaint.export');
+});
 
 Route::get('/dashboard', function () {
     $complaints = Complaint::get();

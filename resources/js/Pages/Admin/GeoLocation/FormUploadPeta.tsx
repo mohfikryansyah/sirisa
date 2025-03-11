@@ -71,7 +71,7 @@ export default function FormUploadPeta() {
         <Dialog open={openDialog} onOpenChange={setOpenDialog}> 
             <DialogTrigger asChild>
                 <Button
-                    variant="default"
+                    variant="custom"
                     className="rounded-xl"
                 >
                     Buat Data Baru

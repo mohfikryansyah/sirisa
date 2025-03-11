@@ -19,6 +19,14 @@ const navbar = [
         url: "#risiko",
         label: "Risiko",
     },
+    {
+        url: "#sinergy",
+        label: "Sinergy",
+    },
+    {
+        url: "#riwayat",
+        label: "Riwayat",
+    },
     // {
     //     url: "#",
     //     label: "About",
@@ -43,7 +51,7 @@ export default function Main({ children, className, navbarClassName, textColor, 
             ) : (
                 <>
                     <Navbar navbar={navbar}/>
-                    <div className={cn("fixed z-[100] bottom-0 w-full p-5 bg-white border-t border-gray-200")}>
+                    {/* <div className={cn("fixed z-[100] bottom-0 w-full p-5 bg-white border-t border-gray-200")}>
                         <div className="flex items-center justify-center">
                             <ul className="flex justify-around w-full gap-4">
                                 <li>
@@ -68,7 +76,7 @@ export default function Main({ children, className, navbarClassName, textColor, 
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> */}
                 </>
             )}
             <main className={cn("flex flex-col flex-1 mb-20", className)}>{children}</main>

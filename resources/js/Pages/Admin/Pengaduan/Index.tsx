@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Complaint } from "@/types";
 import { columns } from "./columns";
 import { HelpCircle, Circle, CheckCircle2, XCircle } from "lucide-react";
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import {
@@ -13,6 +13,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogDescription,
+    DialogFooter,
 } from "@/Components/ui/dialog";
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -32,12 +33,34 @@ import { cn } from "@/lib/utils";
 import { ComplaintForm } from "@/Pages/LandingPage/Form/ComplaintForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { statuses, statuses2 } from "./data";
+import { Label } from "@/Components/ui/label";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/Components/ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/Components/ui/popover";
+import ExportPengaduan from "./export-pengaduan";
+
+interface ExportComplaint {
+    status: string;
+    startDate: Date | null;
+    endDate: Date | null;
+}
 
 export default function Index({ complaints }: { complaints: Complaint[] }) {
     const [openDialog, setOpenDialog] = useState(false);
+    const [openDialogStatus, setOpenDialogStatus] = useState(false);
     const [selectedComplaint, setSelectedComplaint] =
         useState<Complaint | null>(null);
-
+        
     const handleOpenDialog = (complaint: Complaint) => {
         setSelectedComplaint(complaint);
         setOpenDialog(true);
@@ -50,6 +73,32 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
         setOpenDialog(false);
     };
 
+    const [values, setValues] = useState<ExportComplaint>({
+        status: "",
+        startDate: null,
+        endDate: null,
+    });
+    function onSubmit() {
+        const formatStartDate = values.startDate ? format(new Date(values.startDate), "yyyy-MM-dd") : null;
+        const formatEndDate = values.endDate ? format(new Date(values.endDate), "yyyy-MM-dd") : null;
+    
+        const queryString = [`status=${values.status}`, `startDate=${formatStartDate}`, `startDate=${formatEndDate}`].join(
+            '&',
+        );
+
+        router.get(route('complaint.export'), {
+            status: values.status,
+            startDate: formatStartDate,
+            endDate: formatEndDate,
+        }, {
+            preserveScroll: true,
+        });
+
+    
+        // Langsung arahkan ke URL untuk trigger download Excel
+        window.location.href = route("complaint.export") + "?" + queryString;
+    }
+
     return (
         <AuthenticatedLayout>
             <Head title="Data Pengaduan" />
@@ -59,7 +108,7 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
                 filter={statuses}
                 searchColumn="Nama"
             >
-                <Button variant={"default"}>Export</Button>
+                <ExportPengaduan />
             </DataTable>
             {isDesktop ? (
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -179,70 +228,61 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
                             </DrawerDescription>
                         </DrawerHeader>
                         {selectedComplaint ? (
-                                    <div className="px-4">
-                                        <p className="font-bold">
-                                            Data pelapor
-                                        </p>
-                                        <div className="space-y-1 mt-2">
-                                            <p>
-                                                Nama : {selectedComplaint.name}
-                                            </p>
-                                            <p>
-                                                Nomor Tlp :{" "}
-                                                {selectedComplaint.telp}
-                                            </p>
-                                        </div>
-                                        <p className="font-bold mt-4">
-                                            Laporan Kejadian
-                                        </p>
-                                        <div className="space-y-1 mt-2">
-                                            <p>{selectedComplaint.message}</p>
-                                        </div>
-                                        <p className="font-bold mt-4">
-                                            Lokasi Kejadian
-                                        </p>
-                                        <div className="space-y-1 mt-2">
-                                            <p>
-                                                {selectedComplaint.latitude},{" "}
-                                                {selectedComplaint.longitude}
-                                            </p>
-                                            <a
-                                                href={`https://maps.google.com/maps?q=${selectedComplaint.latitude},${selectedComplaint.longitude}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center text-blue-400 hover:underline"
-                                            >
-                                                Lihat di Google Maps{" "}
-                                            </a>
-                                        </div>
-                                        <p className="font-bold mt-4">Bukti</p>
-                                        {selectedComplaint.files?.length >
-                                            0 && (
-                                            <div className="h-[200px] overflow-hidden">
-                                                <a
-                                                    href={
-                                                        "/storage/" +
-                                                        selectedComplaint
-                                                            .files[0].file_path
-                                                    }
-                                                    target="__blank"
-                                                >
-                                                    <img
-                                                        src={
-                                                            "/storage/" +
-                                                            selectedComplaint
-                                                                .files[0]
-                                                                .file_path
-                                                        }
-                                                        alt="Lampiran pengaduan"
-                                                    />
-                                                </a>
-                                            </div>
-                                        )}
+                            <div className="px-4">
+                                <p className="font-bold">Data pelapor</p>
+                                <div className="space-y-1 mt-2">
+                                    <p>Nama : {selectedComplaint.name}</p>
+                                    <p>Nomor Tlp : {selectedComplaint.telp}</p>
+                                </div>
+                                <p className="font-bold mt-4">
+                                    Laporan Kejadian
+                                </p>
+                                <div className="space-y-1 mt-2">
+                                    <p>{selectedComplaint.message}</p>
+                                </div>
+                                <p className="font-bold mt-4">
+                                    Lokasi Kejadian
+                                </p>
+                                <div className="space-y-1 mt-2">
+                                    <p>
+                                        {selectedComplaint.latitude},{" "}
+                                        {selectedComplaint.longitude}
+                                    </p>
+                                    <a
+                                        href={`https://maps.google.com/maps?q=${selectedComplaint.latitude},${selectedComplaint.longitude}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center text-blue-400 hover:underline"
+                                    >
+                                        Lihat di Google Maps{" "}
+                                    </a>
+                                </div>
+                                <p className="font-bold mt-4">Bukti</p>
+                                {selectedComplaint.files?.length > 0 && (
+                                    <div className="h-[200px] overflow-hidden">
+                                        <a
+                                            href={
+                                                "/storage/" +
+                                                selectedComplaint.files[0]
+                                                    .file_path
+                                            }
+                                            target="__blank"
+                                        >
+                                            <img
+                                                src={
+                                                    "/storage/" +
+                                                    selectedComplaint.files[0]
+                                                        .file_path
+                                                }
+                                                alt="Lampiran pengaduan"
+                                            />
+                                        </a>
                                     </div>
-                                ) : (
-                                    <p>loading...</p>
                                 )}
+                            </div>
+                        ) : (
+                            <p>loading...</p>
+                        )}
                         <DrawerFooter>
                             <DrawerClose>
                                 <Button variant="outline" className="w-full">

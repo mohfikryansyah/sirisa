@@ -81,7 +81,7 @@ class ComplaintController extends Controller
                 }
             }
 
-            Mail::to('nursepthyarazak@gmail.com')->send(new ComplaintStatusMail($complaint));
+            // Mail::to('nursepthyarazak@gmail.com')->send(new ComplaintStatusMail($complaint));
 
             DB::commit();
             return redirect()->back();

@@ -43,13 +43,13 @@ export default function ComplaintChart({
 }: {
     complaints: Complaint[];
 }) {
-    const currentYear = new Date().getFullYear(); // Tahun saat ini
+    const currentYear = new Date().getFullYear();
 
     const complaintsChartData = complaints
         .filter(
             (complaint) =>
                 new Date(complaint.created_at).getFullYear() === currentYear
-        ) // Hanya ambil data tahun ini
+        )
         .reduce((acc, complaint) => {
             const date = new Date(complaint.created_at);
             const month = date.toLocaleString("id-ID", { month: "long" });
@@ -105,12 +105,18 @@ export default function ComplaintChart({
     const firstMonth = monthsDisplayed[0];
     const lastMonth = monthsDisplayed[monthsDisplayed.length - 1];
 
-    const lastMonthData = chartData[chartData.length - 1];
-    const prevMonthData = chartData[chartData.length - 2] || {
-        belumDiproses: 0,
-        sedangDiproses: 0,
-        selesaiDiproses: 0,
-        ditolak: 0,
+    const lastMonthData = chartData[chartData.length - 1] || { 
+        belumDiproses: 0, 
+        sedangDiproses: 0, 
+        selesaiDiproses: 0, 
+        ditolak: 0 
+    };
+    
+    const prevMonthData = chartData[chartData.length - 2] || { 
+        belumDiproses: 0, 
+        sedangDiproses: 0, 
+        selesaiDiproses: 0, 
+        ditolak: 0 
     };
 
     const totalLastMonth =
@@ -136,7 +142,6 @@ export default function ComplaintChart({
             : percentageChange < 0
             ? `Menurun ${Math.abs(percentageChange).toFixed(1)}%`
             : "Tidak ada perubahan";
-
 
     return (
         <Card className="max-w-screen-md">
@@ -217,7 +222,6 @@ export default function ComplaintChart({
                         </div>
                     </div>
                 </div>
-                ;
             </CardFooter>
         </Card>
     );

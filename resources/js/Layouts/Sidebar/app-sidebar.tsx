@@ -43,7 +43,7 @@ const data = {
             title: "Dashboard",
             url: route("dashboard"),
             icon: LayoutGrid,
-            roles: ['admin']
+            roles: ['admin', 'kabalai']
         },
         {
             title: "Data Peta",
@@ -55,13 +55,7 @@ const data = {
             title: "Data Pengaduan",
             url: route("complaint.index"),
             icon: CheckCircle,
-            roles: ['admin']
-        },
-        {
-            title: "Dashboard",
-            url: route("complaint.index"),
-            icon: CheckCircle,
-            roles: ['masyarakat']
+            roles: ['admin', 'kabalai']
         },
     ],
     navSecondary: [

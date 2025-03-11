@@ -352,8 +352,8 @@ export default function PetaBencana({
                             <div className="flex justify-between items-center ">
                                 <Button
                                     onClick={handleZoomIn}
-                                    className="zoom-button"
                                     title="Perbesar"
+                                    variant={url.endsWith('geo-location') ? "custom" : "default"}
                                 >
                                     +
                                 </Button>
@@ -362,8 +362,8 @@ export default function PetaBencana({
 
                                 <Button
                                     onClick={handleZoomOut}
-                                    className="zoom-button "
                                     title="Perkecil"
+                                    variant={url.endsWith('geo-location') ? "custom" : "default"}
                                 >
                                     -
                                 </Button>
@@ -372,6 +372,7 @@ export default function PetaBencana({
                                 onClick={resetZoomLevel}
                                 className="w-full mt-2"
                                 title="Reset Zoom"
+                                variant={url.endsWith('geo-location') ? "custom" : "default"}
                             >
                                 <RefreshCcwDotIcon />
                                 Reset Zoom
@@ -381,6 +382,7 @@ export default function PetaBencana({
                                 onClick={handleFullscreen}
                                 className="w-full mt-2"
                                 title="Fullscreen"
+                                variant={url.endsWith('geo-location') ? "custom" : "default"}
                             >
                                 <Fullscreen />
                                 Fullscreen
@@ -393,8 +395,8 @@ export default function PetaBencana({
                                 </h1>
                                 <PopoverTrigger asChild>
                                     <Button
-                                        variant="default"
                                         className="w-full"
+                                        variant={url.endsWith('geo-location') ? "custom" : "default"}
                                     >
                                         Pilih Peta
                                     </Button>
@@ -472,6 +474,7 @@ export default function PetaBencana({
                             <Button
                                 onClick={handleSearchCoordinates}
                                 className="w-full"
+                                variant={url.endsWith('geo-location') ? "custom" : "default"}
                             >
                                 <Search className="mr-2 h-4 w-4" /> Cari
                                 Koordinat

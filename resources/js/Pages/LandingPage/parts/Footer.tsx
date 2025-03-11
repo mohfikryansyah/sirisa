@@ -42,11 +42,11 @@ export default function Footer() {
                                     <path fill="none" d="M0 0h24v24H0z"></path>
                                     <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path>
                                 </svg>
-                                <p>+6282290142486</p>
+                                <p>+62822900000</p>
                             </a>
                         </div>
                     </div>
-                    <div className="flex w-full flex-wrap gap-8 md:w-2/3 md:flex-nowrap">
+                    {/* <div className="flex w-full flex-wrap gap-8 md:w-2/3 md:flex-nowrap">
                         <div className="flex w-2/5 flex-col gap-4 md:w-1/3">
                             <h2 className="mb-2 font-bold">Program</h2>
                             <a
@@ -110,11 +110,11 @@ export default function Footer() {
                                 Kebijakan Privasi
                             </a>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="flex flex-col-reverse justify-between gap-4 border-t-2 border-neutral-700 pt-4 md:flex-row lg:items-center">
                     <p className="text-sm text-neutral-400">
-                        Mohamad Fiqriansyah Panu
+                        Balai Pemantapan Kawasan Hutan dan Tata Lingkungan XV Gorontalo
                     </p>
                     <div className="flex gap-4">
                         <a

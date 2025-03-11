@@ -25,7 +25,7 @@ export function TableContent<TData>({
             <Table>
                 <TableHeader className="group">
                     {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id} className="bg-slate-800 group-hover:bg-slate-900">
+                        <TableRow key={headerGroup.id} className="bg-stone-700 group-hover:bg-stone-800">
                             {headerGroup.headers.map((header) => (
                                 <TableHead key={header.id} className="text-white">
                                     {header.isPlaceholder

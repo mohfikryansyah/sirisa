@@ -1,6 +1,6 @@
 export default function Sinergi() {
     return (
-        <section className="w-full px-4">
+        <section id="sinergy" className="w-full px-4">
             <div className="max-w-for-monitor mx-auto">
                 <h1 className="text-center text-4xl font-bold text-sirisa-primary">
                     Sinergi BPKHTL
@@ -12,7 +12,7 @@ export default function Sinergi() {
                     BPKHTL dalam Pengelolaan Hutan yang Berkelanjutan"
                 </p>
                 </div>
-                <div className="flex items-center justify-center gap-4 mt-10">
+                <div className="flex md:flex-row flex-col items-center justify-center gap-4 mt-10">
                     <a href="https://gorontalo.basarnas.go.id/" target="_blank">
                         <div className="rounded-xl border flex items-center justify-center w-[300px] py-5 duration-300 gap-3">
                             <img
