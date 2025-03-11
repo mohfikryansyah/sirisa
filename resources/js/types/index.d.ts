@@ -1,7 +1,13 @@
+export interface BreadcrumbItem {
+    title: string;
+    href: string;
+}
+
 export interface User {
     id: number;
     name: string;
     avatar: string;
+    roles: string;
     email: string;
     email_verified_at?: string;
 }
@@ -37,6 +43,7 @@ export interface Complaint {
     latitude: number;
     longitude: number;
     audio: string;
+    telp: string;
     files: ComplaintFile[];
     statuses: ComplaintStatus;
     created_at: string;

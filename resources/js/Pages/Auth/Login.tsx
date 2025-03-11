@@ -105,12 +105,12 @@ export default function Login({
                         Masuk
                     </Button>
                 </form>
-                <div className="relative my-7 flex items-center justify-center">
+                {/* <div className="relative my-7 flex items-center justify-center">
                     <div className="h-[2px] z-0 absolute w-full bg-gray-100"></div>
                     <div className="bg-white z-10 px-3">Atau</div>
-                </div>
+                </div> */}
 
-                <a href={route("auth.google")}>
+                {/* <a href={route("auth.google")}>
                     <Button className="w-full rounded-xl">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +137,7 @@ export default function Login({
                         </svg>
                         Masuk dengan Akun Google
                     </Button>
-                </a>
+                </a> */}
             </TemplateAuth>
         </GuestLayout>
     );

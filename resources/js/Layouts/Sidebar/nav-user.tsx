@@ -7,6 +7,7 @@ import {
     CreditCard,
     LogOut,
     Sparkles,
+    SquareTerminal,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
@@ -99,27 +100,16 @@ export function NavUser() {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <Sparkles />
-                                Upgrade to Pro
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            <Link href="profile">
-                                <DropdownMenuItem>
-                                    <BadgeCheck />
-                                    Account
+                            <Link
+                                href={route("profile.edit")}
+                                as="button"
+                                className="w-full"
+                            >
+                                <DropdownMenuItem className="cursor-pointer">
+                                    <SquareTerminal />
+                                    Pengaturan Akun
                                 </DropdownMenuItem>
                             </Link>
-                            <DropdownMenuItem>
-                                <CreditCard />
-                                Billing
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Bell />
-                                Notifications
-                            </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <Link

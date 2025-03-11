@@ -16,10 +16,10 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use Illuminate\Support\Facades\Hash;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+    // Route::get('register', [RegisteredUserController::class, 'create'])
+    //     ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    // Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
@@ -38,37 +38,39 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
 
-    Route::get('auth/google', function () {
-        return Socialite::driver('google')->redirect();
-    })->name('auth.google');
+    // Route::get('auth/google', function () {
+    //     return Socialite::driver('google')->redirect();
+    // })->name('auth.google');
 
-    Route::get('auth/google/callback', function () {
-        try {
-            $googleUser = Socialite::driver('google')->user();
-            $user = User::where('email', $googleUser->email)->first();
+    // Route::get('auth/google/callback', function () {
+    //     try {
+    //         $googleUser = Socialite::driver('google')->user();
+    //         $user = User::where('email', $googleUser->email)->first();
 
-            if ($user) {
-                if (!$user->google_id) {
-                    $user->update([
-                        'google_id' => $googleUser->id,
-                        'avatar' => $googleUser->avatar,
-                    ]);
-                }
-            } else {
-                User::create([
-                    'google_id' => $googleUser->id,
-                    'name' => $googleUser->name,
-                    'email' => $googleUser->email,
-                    'avatar' => $googleUser->avatar,
-                    'password' => Hash::make("password" . $googleUser->id . time()),
-                ]);
-            }
-            Auth::login($user);
-            return redirect('/dashboard');
-        } catch (\Exception $e) {
-            return redirect('/login')->with('error', 'Terjadi kesalahan saat login menggunakan Google');
-        }
-    })->name('auth.google.callback');
+    //         if ($user) {
+    //             if (!$user->google_id) {
+    //                 $user->update([
+    //                     'google_id' => $googleUser->id,
+    //                     'avatar' => $googleUser->avatar,
+    //                 ]);
+    //             }
+    //         } else {
+    //             $user = User::create([
+    //                 'google_id' => $googleUser->id,
+    //                 'name' => $googleUser->name,
+    //                 'email' => $googleUser->email,
+    //                 'avatar' => $googleUser->avatar,
+    //                 'password' => Hash::make("password" . $googleUser->id . time()),
+    //             ]);
+                
+    //             $user->assignRole('masyarakat');
+    //         }
+    //         Auth::login($user);
+    //         return redirect('/dashboard');
+    //     } catch (\Exception $e) {
+    //         return redirect('/login')->with('error', 'Terjadi kesalahan saat login menggunakan Google');
+    //     }
+    // })->name('auth.google.callback');
 });
 
 Route::middleware('auth')->group(function () {

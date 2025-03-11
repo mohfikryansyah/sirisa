@@ -43,22 +43,26 @@ const data = {
             title: "Dashboard",
             url: route("dashboard"),
             icon: LayoutGrid,
-        },
-        {
-            title: "Pengaturan Akun",
-            url: route("profile.edit"),
-            icon: SquareTerminal,
+            roles: ['admin']
         },
         {
             title: "Data Peta",
             url: route("geo-location.index"),
             icon: Map,
+            roles: ['admin']
         },
         {
             title: "Data Pengaduan",
             url: route("complaint.index"),
             icon: CheckCircle,
-        }
+            roles: ['admin']
+        },
+        {
+            title: "Dashboard",
+            url: route("complaint.index"),
+            icon: CheckCircle,
+            roles: ['masyarakat']
+        },
     ],
     navSecondary: [
         {

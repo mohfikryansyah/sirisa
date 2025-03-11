@@ -18,19 +18,25 @@ import {
 } from "@/Components/ui/sidebar";
 import { Link, usePage } from "@inertiajs/react";
 import { Separator } from "@/Components/ui/separator";
-import { PropsWithChildren, ReactNode, useState } from "react";
+import { Fragment, PropsWithChildren, ReactNode, useState } from "react";
+import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
+
 
 export default function Authenticated({
     header,
     children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+    breadcrumbs = [],
+}: PropsWithChildren<{ header?: ReactNode, breadcrumbs?: BreadcrumbItemType[] }>) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     return (
-        <SidebarProvider className="has-[[data-variant=inset]]:bg-stone-700" data-lenis-prevent>
+        <SidebarProvider
+            className="has-[[data-variant=inset]]:bg-stone-700"
+            data-lenis-prevent
+        >
             <AppSidebar />
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
@@ -40,24 +46,46 @@ export default function Authenticated({
                             orientation="vertical"
                             className="mr-2 h-4"
                         />
-                        <Breadcrumb>
-                            <BreadcrumbList>
-                                <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink href="#">
-                                        Building Your Application
-                                    </BreadcrumbLink>
-                                </BreadcrumbItem>
-                                <BreadcrumbSeparator className="hidden md:block" />
-                                <BreadcrumbItem>
-                                    <BreadcrumbPage>
-                                        Data Fetching
-                                    </BreadcrumbPage>
-                                </BreadcrumbItem>
-                            </BreadcrumbList>
-                        </Breadcrumb>
+                        {breadcrumbs.length > 0 && (
+                            <Breadcrumb>
+                                <BreadcrumbList>
+                                    {breadcrumbs.map((item, index) => {
+                                        const isLast =
+                                            index === breadcrumbs.length - 1;
+                                        return (
+                                            <Fragment key={index}>
+                                                <BreadcrumbItem>
+                                                    {isLast ? (
+                                                        <BreadcrumbPage>
+                                                            {item.title}
+                                                        </BreadcrumbPage>
+                                                    ) : (
+                                                        <BreadcrumbLink asChild>
+                                                            <Link
+                                                                href={item.href}
+                                                            >
+                                                                {item.title}
+                                                            </Link>
+                                                        </BreadcrumbLink>
+                                                    )}
+                                                </BreadcrumbItem>
+                                                {!isLast && (
+                                                    <BreadcrumbSeparator />
+                                                )}
+                                            </Fragment>
+                                        );
+                                    })}
+                                </BreadcrumbList>
+                            </Breadcrumb>
+                        )}
                     </div>
                 </header>
-                <main className="p-4 pt-0 w-full overflow-hidden" data-lenis-prevent>{children}</main>
+                <main
+                    className="p-4 pt-0 w-full overflow-hidden"
+                    data-lenis-prevent
+                >
+                    {children}
+                </main>
             </SidebarInset>
         </SidebarProvider>
     );

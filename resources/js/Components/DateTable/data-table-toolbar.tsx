@@ -28,6 +28,7 @@ interface TableToolbarProps<TData> {
     setGlobalFilter: (value: string) => void;
     filter?: Status[];
     searchColumn: string;
+    children?: React.ReactNode;
 }
 
 export function TableToolbar<TData>({
@@ -36,6 +37,7 @@ export function TableToolbar<TData>({
     setGlobalFilter,
     filter,
     searchColumn,
+    children,
 }: TableToolbarProps<TData>) {
     const isFilteredTitle = table.getState().columnFilters.length > 0;
     const isFilteredGlobal = globalFilter && globalFilter.length > 0;
@@ -115,7 +117,7 @@ export function TableToolbar<TData>({
                             .getColumn(searchColumn)
                             ?.setFilterValue(e.target.value);
                     }}
-                    className="max-w-sm"
+                    className="max-w-sm h-10"
                     ref={searchInputRef}
                 />
                 {filter && (
@@ -142,6 +144,8 @@ export function TableToolbar<TData>({
                         <X />
                     </Button>
                 )}
+
+                {children}
             </div>
 
             <div className="flex">

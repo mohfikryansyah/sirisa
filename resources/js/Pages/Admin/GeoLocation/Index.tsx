@@ -6,23 +6,26 @@ import FormUploadPeta from "./FormUploadPeta";
 import { columns } from "./columns";
 import PetaBencana from "./PetaBencana";
 
-
 export default function GeoLocation({
     geoLocations,
 }: {
     geoLocations: GeoLocationType[];
 }) {
-    
-
     return (
         <AuthenticatedLayout>
             <Head title="Geo Location" />
 
             <FormUploadPeta />
 
-            <PetaBencana geoLocations={geoLocations} />
+            <div className="max-h-[800px] mt-2">
+                <PetaBencana geoLocations={geoLocations} />
+            </div>
 
-            <DataTable columns={columns} data={geoLocations} searchColumn="Judul Peta"/>
+            <DataTable
+                columns={columns}
+                data={geoLocations}
+                searchColumn="Judul Peta"
+            />
         </AuthenticatedLayout>
     );
 }

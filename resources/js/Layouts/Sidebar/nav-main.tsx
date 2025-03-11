@@ -15,9 +15,7 @@ import {
 } from "@/Components/ui/collapsible";
 import {
     SidebarGroup,
-    SidebarGroupLabel,
     SidebarMenu,
-    SidebarMenuAction,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarMenuSub,
@@ -25,6 +23,7 @@ import {
     SidebarMenuSubItem,
 } from "@/Components/ui/sidebar";
 import { Link, usePage } from "@inertiajs/react";
+import { hasRole } from "@/helpers";
 
 export function NavMain({
     items,
@@ -34,6 +33,7 @@ export function NavMain({
         url: string;
         icon: LucideIcon;
         isActive?: boolean;
+        roles?: string[];
         items?: {
             isActive?: boolean;
             title: string;
@@ -43,27 +43,34 @@ export function NavMain({
 }) {
     const url = window.location.href;
 
+    const user = usePage().props.auth.user;
+
     return (
         <SidebarGroup>
-            {/* <SidebarGroupLabel className="text-white">Platform</SidebarGroupLabel> */}
             <SidebarMenu>
-                {items.map((item) => {
-                    return (
-                        <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton
-                                asChild
-                                {...(url === item.url
-                                    ? { isActive: true }
-                                    : {})}
-                            >
-                                <a href={item.url}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                </a>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    );
-                })}
+                {items
+                    .filter(
+                        (item) =>
+                            !item.roles ||
+                            item.roles.some((role) => hasRole(user, role))
+                    )
+                    .map((item) => {
+                        return (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton
+                                    asChild
+                                    {...(url === item.url
+                                        ? { isActive: true }
+                                        : {})}
+                                >
+                                    <a href={item.url}>
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        );
+                    })}
             </SidebarMenu>
         </SidebarGroup>
     );

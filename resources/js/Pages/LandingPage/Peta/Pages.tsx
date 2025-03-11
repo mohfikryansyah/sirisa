@@ -15,42 +15,39 @@ export default function PagesPetaKRB({ geoLocations }: PageProps) {
 
     return (
         <Main
-            className="h-screen md:overflow-hidden"
-            navbarClassName="bg-sirisa-primary mt-0 relative"
+            className="md:overflow-hidden md:max-h-[100vh]"
+            navbarClassName="bg-sirisa-primary mt-0 pt-0"
             textColor="text-gray-200"
             backgroundLogo="bg-white p-1.5 rounded-lg"
         >
             <Head title="Peta Kawasan Rawan Bencana" />
-            <div className="h-screen overflow-hidden relative bg-gray-50 w-full">
-                    <h1 className="text-center text-4xl font-bold mb-1 text-sirisa-primary py-5">
-                        Peta Kawasan Rawan Bencana
-                    </h1>
-                    <div className="px-5">
-                        <PetaBencana geoLocations={geoLocations} />
-                    </div>
-            </div>
 
-            <footer
-                className={cn(
-                    "bg-slate-800 px-20 w-full py-4 md:flex items-center justify-between",
-                    isMobile ? "" : "bottom-0 absolute"
+            <div className={cn(isMobile && "px-4")}>
+                <h1 className="text-center md:text-4xl text-3xl mt-24 font-bold mb-4 text-sirisa-primary">
+                    Peta Kawasan Rawan Bencana
+                </h1>
+                <PetaBencana geoLocations={geoLocations} />
+
+                {!isMobile && (
+                    <footer
+                        className={cn(
+                            "bg-slate-800 px-20 w-full py-4 md:flex items-center justify-between bottom-0 absolute"
+                        )}
+                    >
+                        <div className="flex md:flex-row flex-col items-center">
+                            <img
+                                src="/kehutanan-logo.png"
+                                className="w-6 h-auto mr-3"
+                                alt="Flowbite Logo"
+                            />
+                            <p className="text-gray-200">
+                                © 2025 BPKHTL XV Gorontalo
+                            </p>
+                        </div>
+                        <p className="text-gray-200">Nur Septhya Razak | UNG</p>
+                    </footer>
                 )}
-            >
-                <div className="flex md:flex-row flex-col items-center">
-                    <img
-                        src="/kehutanan-logo.png"
-                        className="w-6 h-auto mr-3"
-                        alt="Flowbite Logo"
-                    />
-                    <p className="text-gray-200">
-                        BPKHTL XV Gorontalo © 2025 Sistem Informasi Risiko
-                        Sumber Daya Alam
-                    </p>
-                </div>
-                <p className="text-gray-200">
-                    Nur Septhya Razak | Universitas Negeri Gorontalo
-                </p>
-            </footer>
+            </div>
         </Main>
     );
 }

@@ -125,7 +125,7 @@ export function ExpandableCardDemo() {
                     </div>
                 ) : null}
             </AnimatePresence>
-            <ul className="max-w-2xl mx-auto w-full gap-4">
+            <ul className="max-w-3xl mx-auto w-full gap-4">
                 {cards.map((card, index) => (
                     <motion.div
                         layoutId={`card-${card.title}-${id}`}
@@ -208,7 +208,7 @@ const cards = [
     {
         description: "Banjir sebagai Dampak Perubahan Iklim",
         title: "Banjir",
-        src: "https://tse2.mm.bing.net/th?id=OIF.kamDa6WmyfnSLYkWVm5zWQ&pid=Api",
+        src: "/bencana/banjir.jpg",
         ctaText: "Lihat",
         ctaLink: "#",
         content: () => {
@@ -230,7 +230,7 @@ const cards = [
     {
         description: "Penebangan Hutan yang Tidak Teratur",
         title: "Deforestasi",
-        src: "https://tse4.mm.bing.net/th?id=OIP.wrP-scfoMxffIyzfomYbLwHaEK&pid=Api",
+        src: "/bencana/deforestasi.jpg",
         ctaText: "Lihat",
         ctaLink: "#",
         content: () => {
@@ -253,7 +253,7 @@ const cards = [
     {
         description: "Ancaman Kebakaran Hutan",
         title: "Kebakaran Hutan",
-        src: "https://tse4.mm.bing.net/th?id=OIP.Vvah6eED8lGrvt9hzoRA7AHaE8&pid=Api",
+        src: "/bencana/kebakaran.jpg",
         ctaText: "Lihat",
         ctaLink: "#",
         content: () => {

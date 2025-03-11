@@ -16,6 +16,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 import {
     Command,
     CommandEmpty,
@@ -32,7 +34,6 @@ import {
 } from "@/Components/ui/popover";
 import { Button } from "@/Components/ui/button";
 import { Complaint, Status } from "@/types";
-import { statuses } from "@/Pages/Admin/Pengaduan/Index";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/Components/ui/checkbox";
 import {
@@ -41,6 +42,7 @@ import {
     DialogContent,
     DialogTrigger,
 } from "@/Components/ui/dialog";
+import { statuses } from "./data";
 
 export const columns = (
     handleOpenDialog: (complaint: Complaint) => void
@@ -67,7 +69,7 @@ export const columns = (
                 aria-label="Select row"
                 className="data-[state=checked]:mt-1"
             />
-        )
+        ),
     },
     {
         accessorKey: "name",
@@ -116,28 +118,23 @@ export const columns = (
         },
         cell: ({ row }) => {
             const message = row.original.message;
-            return <div className="truncate max-w-xs">{message}</div>;
+            return <div className="truncate w-[200px]">{message}</div>;
         },
     },
     {
         accessorKey: "files",
         id: "Files",
-        header: "Files",
+        header: "Bukti",
         cell: ({ row }) => {
             const files = row.original.files;
             return (
-                <span className="ml-2">
-                    {files.map((file) => (
-                        <div key={file.id}>
-                            <a
-                                href={"storage/" + file.file_path}
-                                download={"storage/" + file.file_path}
-                            >
-                                Download File
-                            </a>
-                        </div>
-                    ))}
-                </span>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleOpenDialog(row.original)}
+                >
+                    Lihat
+                </Button>
             );
         },
     },
@@ -298,9 +295,12 @@ export const columns = (
         },
         cell: ({ row }) => {
             const createdAt = row.original.created_at;
+            const formatted = format(createdAt, "EEEE, d MMMM y", {
+                locale: id,
+            });
             // const formatted = dayjs(createdAt).fromNow();
 
-            return <span className="font-medium text-center">{createdAt}</span>;
+            return <span className="font-medium text-center">{formatted}</span>;
         },
     },
     {

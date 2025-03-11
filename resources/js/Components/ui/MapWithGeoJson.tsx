@@ -10,6 +10,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon, PathOptions, StyleFunction } from "leaflet";
+import { cn } from "@/lib/utils";
 
 type Props = {
     className?: string;
@@ -38,29 +39,24 @@ export default function MapWithGeoJson({
     mapRef,
 }: Props & PropsWithChildren) {
     const maxBounds: [[number, number], [number, number]] = [
-        [0.30, 122.9], // Kiri Bawah (Latitude, Longitude)
-        [0.90, 123.7], // Kanan Atas (Latitude, Longitude)
+        [0.3, 122.9], // Kiri Bawah (Latitude, Longitude)
+        [0.9, 123.7], // Kanan Atas (Latitude, Longitude)
     ];
 
     return (
-        <div className={className} 
-        // style={{ height }}
+        <MapContainer
+            center={center}
+            zoom={zoom}
+            zoomControl={false}
+            minZoom={11}
+            className={cn("z-10", className)}
+            style={{ height: "100%", width: "100%" }}
+            maxBounds={maxBounds}
+            maxBoundsViscosity={1.0}
+            ref={mapRef}
         >
-            <MapContainer
-                center={center}
-                zoom={zoom}
-                zoomControl={false}
-                minZoom={11}
-                className="z-10"
-                style={{ height: "100%", width: "100%" }}
-                maxBounds={maxBounds}
-                maxBoundsViscosity={1.0}
-                ref={mapRef}
-                
-            >
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                {children}
-            </MapContainer>
-        </div>
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            {children}
+        </MapContainer>
     );
 }

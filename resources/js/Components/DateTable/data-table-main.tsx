@@ -25,6 +25,7 @@ interface DataTableProps<TData, TValue> {
     data: TData[];
     filter?: Status[];
     searchColumn: string;
+    children?: React.ReactNode
 }
 
 export function DataTable<TData, TValue>({
@@ -32,6 +33,7 @@ export function DataTable<TData, TValue>({
     data,
     filter,
     searchColumn,
+    children
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState("");
@@ -68,6 +70,7 @@ export function DataTable<TData, TValue>({
                 globalFilter={globalFilter}
                 setGlobalFilter={setGlobalFilter}
                 searchColumn={searchColumn}
+                children={children}
             />
             <TableContent table={table} columns={columns} />
             <TablePagination table={table} />

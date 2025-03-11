@@ -9,8 +9,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ComplaintFile;
 use Illuminate\Validation\Rule;
+use App\Mail\ComplaintStatusMail;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ComplaintController extends Controller
 {
@@ -43,9 +45,11 @@ class ComplaintController extends Controller
             'telp' => 'required|numeric|min_digits:9|max_digits:15',
             'latitude' => 'required',
             'longitude' => 'required',
-            'audio' => 'nullable|file',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            // 'audio' => 'nullable|file',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        // dd($validatedData);
 
         DB::beginTransaction();
 
@@ -54,18 +58,18 @@ class ComplaintController extends Controller
                 'name' => $validatedData['name'],
                 'message' => $validatedData['message'],
                 'telp' => $validatedData['telp'],
-                'latitude' => $validatedData['latitude'] = (float) $request['longitude'],
-                'longitude' => $validatedData['longitude'] = (float) $request['latitude'],
+                'latitude' => (float) $validatedData['latitude'],
+                'longitude' => (float) $validatedData['longitude'],
             ]);
 
             $complaint->statuses()->create([
                 'complaint_id' => $complaint->id,
             ]);
 
-            if ($request->hasFile('audio')) {
-                $audioPath = $request->file('audio')->store('complaints/audio');
-                $complaint->update(['audio' => $audioPath]);
-            }
+            // if ($request->hasFile('audio')) {
+            //     $audioPath = $request->file('audio')->store('complaints/audio');
+            //     $complaint->update(['audio' => $audioPath]);
+            // }
 
             if ($request->hasFile('files')) {
                 foreach ($request->file('files') as $file) {
@@ -77,6 +81,8 @@ class ComplaintController extends Controller
                 }
             }
 
+            Mail::to('nursepthyarazak@gmail.com')->send(new ComplaintStatusMail($complaint));
+
             DB::commit();
             return redirect()->back();
         } catch (\Throwable $th) {
@@ -86,7 +92,7 @@ class ComplaintController extends Controller
 
 
 
-        return redirect()->back()->with('sucess', 'Berhasil mengirimkan penguduan!');
+        return redirect()->back();
     }
 
     /**

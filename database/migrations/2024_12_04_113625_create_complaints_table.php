@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('message');
             $table->double('latitude');
             $table->double('longitude');
-            $table->string('audio')->nullable();
+            // $table->string('audio')->nullable();
             $table->timestamps();
         });
     }

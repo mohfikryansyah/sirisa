@@ -4,6 +4,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { Contact2, HomeIcon, LogInIcon, Map } from "lucide-react";
 import { Link } from "@inertiajs/react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const navbar = [
     {
@@ -33,9 +34,10 @@ type PageProps = {
 
 export default function Main({ children, className, navbarClassName, textColor, backgroundLogo }: PropsWithChildren<PageProps>) {
     const isDesktop = useMediaQuery("(min-width: 768px)");
+    const isMobile = useIsMobile()
 
     return (
-        <div className={cn("relative", className)}>
+        <div className={cn("relative", !isMobile && "h-screen")}>
             {isDesktop ? (
                 <Navbar navbar={navbar} navbarClassName={navbarClassName} textColor={textColor} backgroundLogo={backgroundLogo} />
             ) : (
@@ -69,7 +71,7 @@ export default function Main({ children, className, navbarClassName, textColor, 
                     </div>
                 </>
             )}
-            <main>{children}</main>
+            <main className={cn("flex flex-col flex-1 mb-20", className)}>{children}</main>
         </div>
     );
 }

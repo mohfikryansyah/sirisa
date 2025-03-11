@@ -19,12 +19,12 @@ class Complaint extends Model
     // protected $casts = [
     //     'created_at' => 'datetime:Y-m-d H:i:s',
     // ];
-    protected function createdAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => \Carbon\Carbon::parse($value)->diffForHumans()
-        );
-    }
+    // protected function createdAt(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn($value) => \Carbon\Carbon::parse($value)->diffForHumans()
+    //     );
+    // }
     protected $appends = [
         'created_at_formatted',
     ];

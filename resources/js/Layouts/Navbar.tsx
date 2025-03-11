@@ -41,11 +41,11 @@ export default function Navbar({
                     navbarItem?.classList.add("max-w-7xl");
                     navbarItem?.classList.remove("max-w-for-monitor");
                     navbar.classList.add("bg-white", "py-1", "shadow-md");
-                    navbar.classList.remove("mt-3");
-                } else {
+                    // navbar.classList.remove("mt-3");
+                } else if (scrollY < 1) {
                     navbarItem?.classList.remove("max-w-7xl");
                     navbarItem?.classList.add("max-w-for-monitor");
-                    navbar.classList.add("mt-3");
+                    // navbar.classList.add("mt-3");
                     navbar.classList.remove("bg-white", "py-1", "shadow-md");
                 }
             }
@@ -61,7 +61,7 @@ export default function Navbar({
         <nav
             ref={navbarRef}
             className={cn(
-                "fixed w-full z-[121] top-0 lg:px-12 px-6 duration-300 transition-all mt-3",
+                "fixed w-full z-[121] top-0 lg:px-12 px-6 duration-300 transition-all",
                 navbarClassName
             )}
         >

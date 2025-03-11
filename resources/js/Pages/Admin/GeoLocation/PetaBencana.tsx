@@ -7,7 +7,12 @@ import { Label } from "@/Components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import { ExternalLinkIcon, Fullscreen, RefreshCcwDotIcon, Search } from "lucide-react";
+import {
+    ExternalLinkIcon,
+    Fullscreen,
+    RefreshCcwDotIcon,
+    Search,
+} from "lucide-react";
 import seedrandom from "seedrandom";
 import MapWithGeoJson from "@/Components/ui/MapWithGeoJson";
 import { GeoJSON, useMap } from "react-leaflet";
@@ -18,6 +23,8 @@ import {
     PopoverTrigger,
     PopoverContent,
 } from "@/Components/ui/popover";
+import { usePage } from "@inertiajs/react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const getColorForTingkatBhy = (tingkatBhy: string) => {
     if (tingkatBhy === "Tinggi") {
@@ -155,7 +162,8 @@ export default function PetaBencana({
                         rel="noopener noreferrer"
                         className="inline-flex items-center text-blue-400 hover:underline"
                     >
-                        Lihat di Google Maps <ExternalLinkIcon className="w-4 h-4 ml-1"/>
+                        Lihat di Google Maps{" "}
+                        <ExternalLinkIcon className="w-4 h-4 ml-1" />
                     </a>
                 </div>
             </>
@@ -325,9 +333,15 @@ export default function PetaBencana({
         }
     };
 
+    const url = usePage().url;
+    const isMobile = useIsMobile();
+
     return (
-        <div className="md:grid grid-cols-12 gap-4">
-            <Card className="col-span-2 overflow-y-auto">
+        <div className={cn("md:grid grid-cols-10 gap-4 md:space-y-0 space-y-4", !url.endsWith('geo-location') && "md:pb-56 md:h-screen")}>
+            <Card
+                className="md:col-span-2 overflow-y-auto md:h-auto h-full"
+                data-lenis-prevent
+            >
                 <CardHeader>
                     <CardTitle>Tools</CardTitle>
                 </CardHeader>
@@ -391,7 +405,6 @@ export default function PetaBencana({
                                     align="start"
                                 >
                                     <div className="flex flex-col gap-2">
-                                        {/* Tombol Toggle Semua */}
                                         <button
                                             onClick={() =>
                                                 toggleAllMaps(!allVisible)
@@ -408,7 +421,6 @@ export default function PetaBencana({
                                                 : "Tampilkan Semua"}
                                         </button>
 
-                                        {/* Daftar Peta */}
                                         {geoLocations.map((geoLocation) => {
                                             const isActive =
                                                 visibleMaps[geoLocation.id];
@@ -469,7 +481,43 @@ export default function PetaBencana({
                 </CardContent>
             </Card>
 
-            <Card className="col-span-2 order-3 overflow-y-auto">
+            <div
+                className={cn(
+                    "flex flex-col flex-1 md:col-span-6 rounded-lg overflow-hidden",
+                    isMobile && "h-[400px]"
+                )}
+            >
+                <MapWithGeoJson zoom={12} mapRef={mapRef}>
+                    <MapController onMapReady={handleMapReady} />
+
+                    {geoLocations
+                        .filter((geoLocation) => visibleMaps[geoLocation.id])
+                        .map((geoLocation) => (
+                            <GeoJSON
+                                key={geoLocation.id}
+                                data={geoLocation.geo_json_data}
+                                style={(feature) => ({
+                                    color: getColor(feature, geoLocation.id),
+                                })}
+                                onEachFeature={(feature, layer) =>
+                                    onEachFeature(
+                                        feature,
+                                        layer,
+                                        geoLocation.title
+                                    )
+                                }
+                                ref={(layer) =>
+                                    handleGeoJSONRef(geoLocation.id, layer)
+                                }
+                            />
+                        ))}
+                </MapWithGeoJson>
+            </div>
+
+            <Card
+                className="md:col-span-2 overflow-y-auto h-full"
+                data-lenis-prevent
+            >
                 <CardHeader>
                     <CardTitle>Legend</CardTitle>
                 </CardHeader>
@@ -518,32 +566,6 @@ export default function PetaBencana({
                     )}
                 </CardContent>
             </Card>
-
-            <MapWithGeoJson
-                className="overflow-hidden rounded-xl col-span-8 h-full shadow-xl"
-                zoom={12}
-                mapRef={mapRef}
-            >
-                <MapController onMapReady={handleMapReady} />
-
-                {geoLocations
-                    .filter((geoLocation) => visibleMaps[geoLocation.id])
-                    .map((geoLocation) => (
-                        <GeoJSON
-                            key={geoLocation.id}
-                            data={geoLocation.geo_json_data}
-                            style={(feature) => ({
-                                color: getColor(feature, geoLocation.id),
-                            })}
-                            onEachFeature={(feature, layer) =>
-                                onEachFeature(feature, layer, geoLocation.title)
-                            }
-                            ref={(layer) =>
-                                handleGeoJSONRef(geoLocation.id, layer)
-                            }
-                        />
-                    ))}
-            </MapWithGeoJson>
         </div>
     );
 }

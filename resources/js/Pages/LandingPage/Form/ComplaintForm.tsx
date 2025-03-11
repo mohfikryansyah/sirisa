@@ -59,7 +59,7 @@ export function ComplaintForm() {
                         variant="outline"
                         className="rounded-xl h-full font-medium text-base"
                     >
-                        Laporkan
+                        Lapor Kejadian
                     </Button>
                 </DialogTrigger>
                 <DialogContent
@@ -105,7 +105,7 @@ export function ComplaintForm() {
                     variant="outline"
                     className="rounded-xl h-full font-medium text-base"
                 >
-                    Laporkan
+                    Lapor Kejadian
                 </Button>
             </DrawerTrigger>
             <DrawerContent className="h-[85vh]">
@@ -156,7 +156,7 @@ function Form({
             name: "",
             telp: "",
             message: "",
-            audio: undefined,
+            // audio: undefined,
             latitude: "",
             longitude: "",
             files: [],
@@ -172,7 +172,7 @@ function Form({
             onSuccess: () => {
                 toast.success("Pengaduan berhasil dikirim!");
                 form.reset();
-                form.setValue("audio", undefined);
+                // form.setValue("audio", undefined);
                 form.setValue("telp", "");
                 setDisable(false);
                 setOpen && setOpen(false);
@@ -260,7 +260,7 @@ function Form({
                     name="message"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Pesan</FormLabel>
+                            <FormLabel>Laporan Kejadian</FormLabel>
                             <FormControl>
                                 <Textarea
                                     rows={5}
@@ -285,7 +285,7 @@ function Form({
                         </FormItem>
                     )}
                 />
-                <FormField
+                {/* <FormField
                     control={form.control}
                     name="audio"
                     render={({ field }) => (
@@ -309,13 +309,13 @@ function Form({
                             <FormMessage />
                         </FormItem>
                     )}
-                />
+                /> */}
                 <FormField
                     control={form.control}
                     name="files"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Dokumen Pendukung</FormLabel>
+                            <FormLabel>Bukti Pendukung</FormLabel>
                             <FormControl>
                                 <div className="w-full mx-auto min-h-80 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
                                     <FileUpload onChange={handleFileUpload} />

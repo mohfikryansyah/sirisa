@@ -8,14 +8,14 @@ export const FormPengaduan = z.object({
     .max(15, "Nomor telepon tidak boleh lebih dari 15 karakter")
     .regex(/^\d+$/, "Nomor telepon hanya boleh mengandung angka"),
     message: z.string().nonempty({ message: "Tidak boleh kosong" }),
-    audio: z.instanceof(File).optional(),
+    // audio: z.instanceof(File).optional(),
     latitude: z.union([z.number(), z.string().regex(/^\d+(\.\d+)?$/, {
               message: "Hanya angka atau angka dengan titik yang diperbolehkan.",
                 }).nonempty()]),
     longitude: z.union([z.number(), z.string().regex(/^\d+(\.\d+)?$/, {
               message: "Hanya angka atau angka dengan titik yang diperbolehkan.",
                 }).nonempty()]),
-    files: z.array(z.instanceof(File)).optional(),
+    files: z.array(z.instanceof(File).refine((file) => file.size <= 1 * 2048 * 2048, {message: 'Foto tidak boleh lebih dari 1MB'}).refine((file) => ["image/jpeg", "image/png"].includes(file.type), "Format harus JPG/PNG")).optional(),
 });
 
 export const FormRepair = z.object({
