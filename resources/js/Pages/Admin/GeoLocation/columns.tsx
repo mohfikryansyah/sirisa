@@ -3,6 +3,8 @@ import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/Components/
 import { GeoLocation } from "@/types";
 import { router } from "@inertiajs/react";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 import { Trash2, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -24,7 +26,11 @@ export const columns: ColumnDef<GeoLocation>[] = [
     // },
     {
         accessorKey: "created_at",
-        header: "Dibuat",
+        header: "Tanggal Upload",
+        cell: ({ row }) => {
+            const formattedDate = format(row.original.created_at, 'EEEE, d MMMM y', {locale: id})
+            return <span>{formattedDate}</span>
+        }
     },
     {
         id: "actions",

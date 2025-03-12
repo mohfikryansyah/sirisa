@@ -28,7 +28,6 @@ import Header from "./parts/Header";
 import TujuanDanManfaat from "./parts/TujuanDanManfaat";
 import Risiko from "./Risiko/Risiko";
 import Footer from "./parts/Footer";
-import BencanaMap from "./Peta/PetaBencana";
 import Sinergi from "./Sinergi/sinergi";
 import { Complaint } from "@/types";
 import { HistoryLaporan } from "./HistoryLaporan/history-laporan";
