@@ -42,10 +42,9 @@ export default function FormUploadPeta() {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
 
     function onSubmit(values: z.infer<typeof GeoLocationFormSchema>) {
-        console.table(values);
         router.post(route("geo-location.store"), values, {
-            preserveScroll: true,
             onSuccess: () => {
+                window.location.reload()
                 form.reset();
                 setResetFileUpload(!resetFileUpload);
                 toast.success("Berhasil menambahkan data peta");

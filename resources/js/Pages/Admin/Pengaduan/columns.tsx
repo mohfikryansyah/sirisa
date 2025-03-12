@@ -118,7 +118,7 @@ export const columns = (
         },
         cell: ({ row }) => {
             const message = row.original.message;
-            return <div className="truncate w-[200px]">{message}</div>;
+            return <div className="truncate w-[200px] pl-4">{message}</div>;
         },
     },
     {
@@ -129,8 +129,9 @@ export const columns = (
             const files = row.original.files;
             return (
                 <Button
-                    variant="ghost"
+                    variant="link"
                     size="sm"
+                    className="p-0"
                     onClick={() => handleOpenDialog(row.original)}
                 >
                     Lihat
@@ -279,7 +280,7 @@ export const columns = (
     },
     {
         accessorKey: "created_at",
-        id: "Tanggal dibuat",
+        id: "Tanggal laporan",
         header: ({ column }) => {
             return (
                 <Button
@@ -288,7 +289,7 @@ export const columns = (
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
                 >
-                    Tanggal dibuat
+                    Tanggal laporan
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );
@@ -300,7 +301,7 @@ export const columns = (
             });
             // const formatted = dayjs(createdAt).fromNow();
 
-            return <span className="font-medium text-center">{formatted}</span>;
+            return <span className="font-medium text-center pl-4">{formatted}</span>;
         },
     },
     {

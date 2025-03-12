@@ -26,8 +26,8 @@ interface TableToolbarProps<TData> {
     table: Table<TData>;
     globalFilter: string;
     setGlobalFilter: (value: string) => void;
-    filter?: Status[];
-    searchColumn: string;
+    isGlobalFilter?: boolean;
+    searchColumn?: string;
     children?: React.ReactNode;
 }
 
@@ -35,20 +35,12 @@ export function TableToolbar<TData>({
     table,
     globalFilter,
     setGlobalFilter,
-    filter,
+    isGlobalFilter,
     searchColumn,
     children,
 }: TableToolbarProps<TData>) {
     const isFilteredTitle = table.getState().columnFilters.length > 0;
     const isFilteredGlobal = globalFilter && globalFilter.length > 0;
-    const status =
-        filter?.map((filter) => ({
-            value: filter.label,
-            label: filter.label,
-            icon: filter.icon,
-            color: filter.color,
-        })) || [];
-
     const [resetFilter, setResetFilter] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -96,17 +88,20 @@ export function TableToolbar<TData>({
     return (
         <div className="flex items-center py-4">
             <div className="flex items-center space-x-2 w-full">
-                {/* <Input
-                    placeholder="Cari nama..."
+                {isGlobalFilter && (
+                    <Input
+                    placeholder="Cari..."
                     value={globalFilter}
                     onChange={(e) =>
                         table.setGlobalFilter(String(e.target.value))
                     }
                     className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0"
-                /> */}
+                />
+                )}
 
-                <Input
-                    placeholder="Filter Nama..."
+                {searchColumn && (
+                    <Input
+                    placeholder="Cari Nama..."
                     value={
                         table
                             .getColumn(searchColumn)
@@ -120,19 +115,8 @@ export function TableToolbar<TData>({
                     className="max-w-sm h-10"
                     ref={searchInputRef}
                 />
-                {filter && (
-                    <>
-                        {table.getColumn("Status") && (
-                            <DataTableFacetedFilter
-                                column={table.getColumn("Status")}
-                                title="Status"
-                                options={status}
-                                resetFilter={resetFilter}
-                                onResetComplete={handleResetComplete}
-                            />
-                        )}
-                    </>
                 )}
+                
 
                 {(isFilteredTitle || isFilteredGlobal) && (
                     <Button

@@ -48,16 +48,11 @@ import {
     PopoverTrigger,
 } from "@/Components/ui/popover";
 import ExportPengaduan from "./export-pengaduan";
+import FilterRentangTanggal from "./filter-rentang-tanggal";
 
-interface ExportComplaint {
-    status: string;
-    startDate: Date | null;
-    endDate: Date | null;
-}
 
 export default function Index({ complaints }: { complaints: Complaint[] }) {
     const [openDialog, setOpenDialog] = useState(false);
-    const [openDialogStatus, setOpenDialogStatus] = useState(false);
     const [selectedComplaint, setSelectedComplaint] =
         useState<Complaint | null>(null);
         
@@ -68,49 +63,38 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
 
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    const handleCloseDialog = () => {
-        setSelectedComplaint(null);
-        setOpenDialog(false);
-    };
-
-    const [values, setValues] = useState<ExportComplaint>({
-        status: "",
-        startDate: null,
-        endDate: null,
-    });
-    function onSubmit() {
-        const formatStartDate = values.startDate ? format(new Date(values.startDate), "yyyy-MM-dd") : null;
-        const formatEndDate = values.endDate ? format(new Date(values.endDate), "yyyy-MM-dd") : null;
-    
-        const queryString = [`status=${values.status}`, `startDate=${formatStartDate}`, `startDate=${formatEndDate}`].join(
-            '&',
-        );
-
-        router.get(route('complaint.export'), {
-            status: values.status,
-            startDate: formatStartDate,
-            endDate: formatEndDate,
-        }, {
-            preserveScroll: true,
-        });
+    const [tanggalAwal, setTanggalAwal] = useState<Date | null>(null);
+    const [tanggalAkhir, setTanggalAkhir] = useState<Date | null>(null);
 
     
-        // Langsung arahkan ke URL untuk trigger download Excel
-        window.location.href = route("complaint.export") + "?" + queryString;
-    }
+    const filteredComplaints = complaints.filter((complaint) => {
+        const formatComplaintDate = format(complaint.created_at, 'yyyy-MM-dd')
+        const formatStartDate = tanggalAwal ? format(tanggalAwal, 'yyyy-MM-dd') : null
+        const formatEndDate = tanggalAkhir ? format(tanggalAkhir, 'yyyy-MM-dd') : null
+
+        if (formatStartDate && formatEndDate) {
+            return formatComplaintDate >= formatStartDate && formatComplaintDate <= formatEndDate
+        } else if (formatStartDate) {
+            return formatComplaintDate >= formatStartDate
+        } else if (formatEndDate) {
+            return formatComplaintDate <= formatEndDate
+        }
+
+        return true;
+    })
 
     return (
         <AuthenticatedLayout>
             <Head title="Data Pengaduan" />
             <DataTable
                 columns={columns(handleOpenDialog)}
-                data={complaints}
-                filter={statuses}
-                searchColumn="Nama"
+                data={filteredComplaints}
+                isGlobalFilter={true}
             >
+                <FilterRentangTanggal setTanggalAkhir={setTanggalAkhir} setTanggalAwal={setTanggalAwal}/>
                 <ExportPengaduan />
             </DataTable>
-            {isDesktop ? (
+            {isDesktop ? (  
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                     <DialogContent>
                         <DialogHeader>

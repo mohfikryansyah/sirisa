@@ -23,15 +23,15 @@ import { Status } from "@/types";
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    filter?: Status[];
-    searchColumn: string;
+    isGlobalFilter?: boolean;
+    searchColumn?: string;
     children?: React.ReactNode
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    filter,
+    isGlobalFilter,
     searchColumn,
     children
 }: DataTableProps<TData, TValue>) {
@@ -71,6 +71,7 @@ export function DataTable<TData, TValue>({
                 setGlobalFilter={setGlobalFilter}
                 searchColumn={searchColumn}
                 children={children}
+                isGlobalFilter={isGlobalFilter}
             />
             <TableContent table={table} columns={columns} />
             <TablePagination table={table} />
