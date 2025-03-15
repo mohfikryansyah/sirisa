@@ -90,7 +90,7 @@ export function ComplaintForm() {
                             form="complaint-form"
                             disabled={disable}
                         >
-                            Kirim Pengaduan
+                            Kirim Laporan
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -135,7 +135,7 @@ export function ComplaintForm() {
                         disabled={disable}
                         form="complaint-form"
                     >
-                        Kirim Pengaduan
+                        Kirim Laporan
                     </Button>
                 </DrawerFooter>
             </DrawerContent>
@@ -264,7 +264,7 @@ function Form({
                             <FormControl>
                                 <Textarea
                                     rows={5}
-                                    placeholder="Tuliskan pesan Anda"
+                                    placeholder="Tuliskan laporan Anda"
                                     className="resize-none focus-visible:ring-[#063b3e]"
                                     {...field}
                                 />
