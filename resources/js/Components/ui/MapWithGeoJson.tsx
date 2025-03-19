@@ -48,12 +48,14 @@ export default function MapWithGeoJson({
             center={center}
             zoom={zoom}
             zoomControl={false}
-            minZoom={11}
+            minZoom={10.5}
             className={cn("z-10", className)}
             style={{ height: "100%", width: "100%" }}
             maxBounds={maxBounds}
             maxBoundsViscosity={1.0}
             ref={mapRef}
+            zoomSnap={0}
+            zoomDelta={0.25}
         >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {children}

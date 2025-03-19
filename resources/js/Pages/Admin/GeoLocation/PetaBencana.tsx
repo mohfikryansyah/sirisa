@@ -91,11 +91,12 @@ export default function PetaBencana({
     const generateColorPalette = (seed: string) => {
         const rng = seedrandom(seed);
         return [
-            `hsl(${Math.floor(rng() * 360)}, 70%, 50%)`,
-            `hsl(${Math.floor(rng() * 360)}, 70%, 60%)`,
-            `hsl(${Math.floor(rng() * 360)}, 70%, 70%)`,
+            `hsla(0, 100%, ${40 + rng() * 20}%, ${0.6 + rng() * 0.4})`,  // Merah lebih variatif
+            `hsla(45, 100%, ${50 + rng() * 20}%, ${0.6 + rng() * 0.4})`, // Jingga-kuning lebih kontras
+            `hsla(130, 100%, ${30 + rng() * 20}%, ${0.6 + rng() * 0.4})` // Hijau lebih variatif
         ];
     };
+    
 
     const colorMap = useMemo(() => {
         return geoLocations.reduce((acc, geoLocation) => {
@@ -105,9 +106,9 @@ export default function PetaBencana({
             return acc;
         }, {} as Record<number, string[]>);
     }, [geoLocations]);
-
+    
     const getColor = (feature: any, geoLocationId: number) => {
-        const colors = colorMap[geoLocationId] || ["#000", "#000", "#000"];
+        const colors = colorMap[geoLocationId] || ["#ff0000", "#ffff00", "#00ff00"];
         const categoryColors: Record<string, string> = {
             Tinggi: colors[0],
             Sedang: colors[1],
@@ -115,6 +116,10 @@ export default function PetaBencana({
         };
         return categoryColors[feature.properties.Tingkat_Bhy] || "#000000";
     };
+    
+    
+    console.log(colorMap)
+    
 
     const createPopupContent = (
         lat: number,
@@ -311,7 +316,7 @@ export default function PetaBencana({
     const noneVisible = visibleCount === 0;
 
     const resetZoomLevel = () => {
-        mapRef.current?.setZoom(12);
+        mapRef.current?.setZoom(10.5);
     };
 
     const handleZoomIn = () => {
@@ -490,7 +495,7 @@ export default function PetaBencana({
                     isMobile && "h-[400px]"
                 )}
             >
-                <MapWithGeoJson zoom={12} mapRef={mapRef}>
+                <MapWithGeoJson zoom={10.5} mapRef={mapRef}>
                     <MapController onMapReady={handleMapReady} />
 
                     {geoLocations
