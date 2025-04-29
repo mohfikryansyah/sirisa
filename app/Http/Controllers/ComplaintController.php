@@ -62,10 +62,12 @@ class ComplaintController extends Controller
                 'longitude' => (float) $validatedData['longitude'],
             ]);
 
+
             $complaint->statuses()->create([
                 'complaint_id' => $complaint->id,
             ]);
 
+            // dd($complaint);
             // if ($request->hasFile('audio')) {
             //     $audioPath = $request->file('audio')->store('complaints/audio');
             //     $complaint->update(['audio' => $audioPath]);
@@ -138,7 +140,7 @@ class ComplaintController extends Controller
     public function deleteSelectedRows(Request $request)
     {
         $ids = $request->input('ids');
-        
+
         if (empty($ids)) {
             return redirect()->back()->with('error', 'Tidak ada baris yang dipilih.');
         }

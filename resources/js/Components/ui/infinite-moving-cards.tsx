@@ -91,7 +91,7 @@ export const InfiniteMovingCards = ({
               background:
                 "linear-gradient(180deg, var(--neutral-800), var(--neutral-900)",
             }}
-            key={item.name}
+            key={idx}
           >
             <blockquote>
               <div
