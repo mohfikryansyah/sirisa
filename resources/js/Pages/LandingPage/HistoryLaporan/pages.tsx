@@ -24,8 +24,8 @@ export default function PagesRiwayatLaporan({
             <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] overflow-hidden">
                 <GridPattern />
             </div>
-            <div className="w-full h-screen overflow-hidden relative">
-                <div className="max-w-7xl mx-auto pt-40 h-full z-[100]">
+            <div className="w-full relative mb-6">
+                <div className="max-w-7xl mx-auto pt-40 h-full z-[10]">
                     <div className="space-y-4">
                         <h1 className="text-4xl font-bold text-gray-800">
                             Riwayat Laporan
