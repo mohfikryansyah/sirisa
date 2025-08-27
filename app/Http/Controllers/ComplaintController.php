@@ -49,8 +49,6 @@ class ComplaintController extends Controller
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // dd($validatedData);
-
         DB::beginTransaction();
 
         try {
@@ -61,7 +59,6 @@ class ComplaintController extends Controller
                 'latitude' => (float) $validatedData['latitude'],
                 'longitude' => (float) $validatedData['longitude'],
             ]);
-
 
             $complaint->statuses()->create([
                 'complaint_id' => $complaint->id,
@@ -91,10 +88,6 @@ class ComplaintController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', $th->getMessage());
         }
-
-
-
-        return redirect()->back();
     }
 
     /**

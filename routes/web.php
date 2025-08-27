@@ -15,6 +15,7 @@ use App\Models\Complaint;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 Route::get('/peta-kawasan-rawan-bencana', [LandingPageController::class, 'peta'])->name('landing-page.peta.krb');
+Route::get('/riwayat-laporan', [LandingPageController::class, 'riwayat'])->name('landing-page.riwayat');
 
 Route::middleware('auth')->group(function () {
     Route::get('/export-complaint', [ExportComplaintController::class, 'export'])->name('complaint.export');

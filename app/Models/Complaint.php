@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Complaint extends Model
@@ -16,15 +17,6 @@ class Complaint extends Model
 
     protected $guarded = ['id'];
     protected $with = ['files', 'statuses'];
-    // protected $casts = [
-    //     'created_at' => 'datetime:Y-m-d H:i:s',
-    // ];
-    // protected function createdAt(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn($value) => \Carbon\Carbon::parse($value)->diffForHumans()
-    //     );
-    // }
     protected $appends = [
         'created_at_formatted',
     ];
@@ -43,6 +35,11 @@ class Complaint extends Model
     public function statuses(): HasOne
     {
         return $this->hasOne(ComplaintStatus::class, 'complaint_id')->latestOfMany();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     // public function repair(): HasOne

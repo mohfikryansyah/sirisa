@@ -12,19 +12,19 @@ const navbar = [
         label: "Beranda",
     },
     {
-        url: "#whyus",
+        url: "/#whyus",
         label: "Statistik",
     },
     {
-        url: "#risiko",
+        url: "/#risiko",
         label: "Risiko",
     },
     {
-        url: "#sinergy",
+        url: "/#sinergy",
         label: "Sinergy",
     },
     {
-        url: "#riwayat",
+        url: route('landing-page.riwayat'),
         label: "Riwayat",
     },
     // {

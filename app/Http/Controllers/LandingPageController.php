@@ -25,4 +25,10 @@ class LandingPageController extends Controller
         $geoLocations = GeoLocation::all();
         return Inertia::render('LandingPage/Peta/Pages', compact('geoLocations'));
     }   
+
+    public function riwayat()
+    {
+        $complaints = Complaint::latest()->get();
+        return Inertia::render('LandingPage/HistoryLaporan/pages', compact('complaints'));
+    }   
 }
