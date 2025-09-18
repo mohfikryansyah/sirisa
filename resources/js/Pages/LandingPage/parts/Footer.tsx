@@ -3,7 +3,7 @@ export default function Footer() {
         <footer className="m-4 mt-16 rounded-2xl bg-neutral-800 text-white md:m-8 md:mt-32">
             <div className="container mx-auto flex flex-col gap-8 px-6 py-8 md:py-12">
                 <div className="flex w-full flex-col gap-8 md:flex-row md:gap-20">
-                    <div className="flex w-full flex-col gap-2 md:w-1/3">
+                    <div className="flex w-full flex-col gap-2 md:w-full">
                         <img src="kehutanan-logo.png" alt="" className="w-28 h-auto" />
                         {/* <p className="mt-4 text-sm leading-relaxed lg:text-base">
                         Sirisa adalah platform informasi untuk membantu kamu memahami dan mengelola risiko sumber daya alam secara lebih baik.
@@ -24,6 +24,7 @@ export default function Footer() {
                                 </svg>
                                 <p> Gorontalo, Indonesia</p>
                             </div>
+                            {/* <div className="h-[1.6rem] w-[0.1rem] bg-gray-500"></div> */}
                             <a
                                 target="_blank"
                                 className="flex items-center justify-center gap-1 text-sm text-neutral-300"
@@ -42,7 +43,7 @@ export default function Footer() {
                                     <path fill="none" d="M0 0h24v24H0z"></path>
                                     <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path>
                                 </svg>
-                                <p>+62822900000</p>
+                                <p>0435 825828 <span className="text-gray-500">/</span> 0851 7236 0015 <span className="text-gray-500 ml-2">(*Silahkan hubungi nomor tersebut jika mendesak)</span></p>
                             </a>
                         </div>
                     </div>

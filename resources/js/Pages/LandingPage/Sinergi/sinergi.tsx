@@ -38,6 +38,9 @@ export default function Sinergi() {
                         </div>
                     </a>
                 </div>
+                <div className="md:flex justify-center mt-4">
+                    <p className="text-gray-400 text-sm">*Klik untuk menghubungi pihak terkait</p>
+                </div>
             </div>
         </section>
     );
