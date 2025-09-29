@@ -14,8 +14,11 @@ class GeoLocationController extends Controller
      */
     public function index()
     {
+        $searchQuery = request()->query('search');
+
         return Inertia::render('Admin/GeoLocation/Index', [
             'geoLocations' => GeoLocation::all(),
+            'searchQuery' => $searchQuery,
         ]);
     }
 

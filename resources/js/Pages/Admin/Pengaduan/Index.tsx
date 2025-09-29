@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Complaint } from "@/types";
 import { columns } from "./columns";
 import { HelpCircle, Circle, CheckCircle2, XCircle } from "lucide-react";
-import { Head, router } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import {
@@ -50,12 +50,11 @@ import {
 import ExportPengaduan from "./export-pengaduan";
 import FilterRentangTanggal from "./filter-rentang-tanggal";
 
-
 export default function Index({ complaints }: { complaints: Complaint[] }) {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedComplaint, setSelectedComplaint] =
         useState<Complaint | null>(null);
-        
+
     const handleOpenDialog = (complaint: Complaint) => {
         setSelectedComplaint(complaint);
         setOpenDialog(true);
@@ -66,22 +65,28 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
     const [tanggalAwal, setTanggalAwal] = useState<Date | null>(null);
     const [tanggalAkhir, setTanggalAkhir] = useState<Date | null>(null);
 
-    
     const filteredComplaints = complaints.filter((complaint) => {
-        const formatComplaintDate = format(complaint.created_at, 'yyyy-MM-dd')
-        const formatStartDate = tanggalAwal ? format(tanggalAwal, 'yyyy-MM-dd') : null
-        const formatEndDate = tanggalAkhir ? format(tanggalAkhir, 'yyyy-MM-dd') : null
+        const formatComplaintDate = format(complaint.created_at, "yyyy-MM-dd");
+        const formatStartDate = tanggalAwal
+            ? format(tanggalAwal, "yyyy-MM-dd")
+            : null;
+        const formatEndDate = tanggalAkhir
+            ? format(tanggalAkhir, "yyyy-MM-dd")
+            : null;
 
         if (formatStartDate && formatEndDate) {
-            return formatComplaintDate >= formatStartDate && formatComplaintDate <= formatEndDate
+            return (
+                formatComplaintDate >= formatStartDate &&
+                formatComplaintDate <= formatEndDate
+            );
         } else if (formatStartDate) {
-            return formatComplaintDate >= formatStartDate
+            return formatComplaintDate >= formatStartDate;
         } else if (formatEndDate) {
-            return formatComplaintDate <= formatEndDate
+            return formatComplaintDate <= formatEndDate;
         }
 
         return true;
-    })
+    });
 
     return (
         <AuthenticatedLayout>
@@ -91,10 +96,13 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
                 data={filteredComplaints}
                 isGlobalFilter={true}
             >
-                <FilterRentangTanggal setTanggalAkhir={setTanggalAkhir} setTanggalAwal={setTanggalAwal}/>
+                <FilterRentangTanggal
+                    setTanggalAkhir={setTanggalAkhir}
+                    setTanggalAwal={setTanggalAwal}
+                />
                 <ExportPengaduan />
             </DataTable>
-            {isDesktop ? (  
+            {isDesktop ? (
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                     <DialogContent>
                         <DialogHeader>
@@ -149,14 +157,12 @@ export default function Index({ complaints }: { complaints: Complaint[] }) {
                                                 {selectedComplaint.latitude},{" "}
                                                 {selectedComplaint.longitude}
                                             </p>
-                                            <a
-                                                href={`https://maps.google.com/maps?q=${selectedComplaint.latitude},${selectedComplaint.longitude}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
+                                            <Link
+                                                href={`/geo-location/result?search=${selectedComplaint.latitude},${selectedComplaint.longitude}`}
                                                 className="inline-flex items-center text-blue-400 hover:underline"
                                             >
-                                                Lihat di Google Maps{" "}
-                                            </a>
+                                                Lihat
+                                            </Link>
                                         </div>
                                         <p className="font-bold mt-4">Bukti</p>
                                         {selectedComplaint.files?.length >

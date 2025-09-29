@@ -31,6 +31,14 @@ Route::post('/complaint', [ComplaintController::class, 'store'])->name('complain
 Route::delete('/complaint/delete-selected-rows', [ComplaintController::class, 'deleteSelectedRows'])->name('complaint.deleteSelectedRows');
 Route::get('/result', [ComplaintController::class, 'search'])->name('complaint.search');
 
+
+Route::get('geo-location/result', function() {
+    $searchQuery = request()->query('search');
+    return Inertia::render('Admin/Pengaduan/show-result-titik-pengaduan', [
+        'searchQuery' => $searchQuery,
+        'geoLocations' => GeoLocation::all(),
+    ]);
+});
 Route::middleware('auth')->group(function () {
     Route::resource('geo-location', GeoLocationController::class);
     Route::resource('/complaint', ComplaintController::class)->except('store');

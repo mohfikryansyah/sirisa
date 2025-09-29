@@ -14,7 +14,9 @@ import {
     Search,
 } from "lucide-react";
 import seedrandom from "seedrandom";
-import MapWithGeoJson from "@/Components/ui/MapWithGeoJson";
+import MapWithGeoJson, {
+    defaultMarkerIcon,
+} from "@/Components/ui/MapWithGeoJson";
 import { GeoJSON, useMap } from "react-leaflet";
 import { useMemo, useState, useRef, useEffect } from "react";
 import { GeoLocation as GeoLocationType } from "@/types";
@@ -56,8 +58,10 @@ const MapController = ({
 
 export default function PetaBencana({
     geoLocations,
+    searchQuery,
 }: {
     geoLocations: GeoLocationType[];
+    searchQuery?: string;
 }) {
     const [visibleMaps, setVisibleMaps] = useState<Record<number, boolean>>(
         () => {
@@ -70,8 +74,35 @@ export default function PetaBencana({
 
     const [latitude, setLatitude] = useState<string>("");
     const [longitude, setLongitude] = useState<string>("");
+    const [latSearchQuery, lngSearchQuery] = (searchQuery ?? "")
+        .split(",")
+        .map(Number);
     const mapRef = useRef<L.Map | null>(null);
     const geoJsonLayersRef = useRef<Record<number, L.GeoJSON>>({});
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (!mapRef.current) return;
+
+            mapRef.current.eachLayer((layer) => {
+                if (layer instanceof L.Marker) {
+                    mapRef.current?.removeLayer(layer);
+                }
+            });
+
+            const lat = latSearchQuery;
+            const lng = lngSearchQuery;
+            const LokasiLamp = L.latLng(lat, lng);
+
+            if (mapRef.current) {
+                L.marker(LokasiLamp, { icon: defaultMarkerIcon }).addTo(
+                    mapRef.current
+                );
+            }
+        }, 200);
+
+        return () => clearTimeout(timer);
+    }, [latSearchQuery, lngSearchQuery]);
 
     const toggleMapVisibility = (id: number) => {
         setVisibleMaps((prev) => ({
@@ -91,12 +122,11 @@ export default function PetaBencana({
     const generateColorPalette = (seed: string) => {
         const rng = seedrandom(seed);
         return [
-            `hsla(0, 100%, ${40 + rng() * 20}%, ${0.6 + rng() * 0.4})`,  // Merah lebih variatif
+            `hsla(0, 100%, ${40 + rng() * 20}%, ${0.6 + rng() * 0.4})`, // Merah lebih variatif
             `hsla(45, 100%, ${50 + rng() * 20}%, ${0.6 + rng() * 0.4})`, // Jingga-kuning lebih kontras
-            `hsla(130, 100%, ${30 + rng() * 20}%, ${0.6 + rng() * 0.4})` // Hijau lebih variatif
+            `hsla(130, 100%, ${30 + rng() * 20}%, ${0.6 + rng() * 0.4})`, // Hijau lebih variatif
         ];
     };
-    
 
     const colorMap = useMemo(() => {
         return geoLocations.reduce((acc, geoLocation) => {
@@ -106,9 +136,13 @@ export default function PetaBencana({
             return acc;
         }, {} as Record<number, string[]>);
     }, [geoLocations]);
-    
+
     const getColor = (feature: any, geoLocationId: number) => {
-        const colors = colorMap[geoLocationId] || ["#ff0000", "#ffff00", "#00ff00"];
+        const colors = colorMap[geoLocationId] || [
+            "#ff0000",
+            "#ffff00",
+            "#00ff00",
+        ];
         const categoryColors: Record<string, string> = {
             Tinggi: colors[0],
             Sedang: colors[1],
@@ -116,10 +150,8 @@ export default function PetaBencana({
         };
         return categoryColors[feature.properties.Tingkat_Bhy] || "#000000";
     };
-    
-    
-    console.log(colorMap)
-    
+
+    console.log(colorMap);
 
     const createPopupContent = (
         lat: number,
@@ -342,7 +374,12 @@ export default function PetaBencana({
     const isMobile = useIsMobile();
 
     return (
-        <div className={cn("md:grid grid-cols-10 gap-4 md:space-y-0 space-y-4", !url.endsWith('geo-location') && "md:pb-56 md:h-screen")}>
+        <div
+            className={cn(
+                "md:grid grid-cols-10 gap-4 md:space-y-0 space-y-4",
+                !url.endsWith("geo-location") && "md:pb-56 md:h-screen"
+            )}
+        >
             <Card
                 className="md:col-span-2 overflow-y-auto md:h-auto h-full"
                 data-lenis-prevent
@@ -358,7 +395,11 @@ export default function PetaBencana({
                                 <Button
                                     onClick={handleZoomIn}
                                     title="Perbesar"
-                                    variant={url.endsWith('geo-location') ? "custom" : "default"}
+                                    variant={
+                                        url.endsWith("geo-location")
+                                            ? "custom"
+                                            : "default"
+                                    }
                                 >
                                     +
                                 </Button>
@@ -368,7 +409,11 @@ export default function PetaBencana({
                                 <Button
                                     onClick={handleZoomOut}
                                     title="Perkecil"
-                                    variant={url.endsWith('geo-location') ? "custom" : "default"}
+                                    variant={
+                                        url.endsWith("geo-location")
+                                            ? "custom"
+                                            : "default"
+                                    }
                                 >
                                     -
                                 </Button>
@@ -377,7 +422,11 @@ export default function PetaBencana({
                                 onClick={resetZoomLevel}
                                 className="w-full mt-2"
                                 title="Reset Zoom"
-                                variant={url.endsWith('geo-location') ? "custom" : "default"}
+                                variant={
+                                    url.endsWith("geo-location")
+                                        ? "custom"
+                                        : "default"
+                                }
                             >
                                 <RefreshCcwDotIcon />
                                 Reset Zoom
@@ -387,7 +436,11 @@ export default function PetaBencana({
                                 onClick={handleFullscreen}
                                 className="w-full mt-2"
                                 title="Fullscreen"
-                                variant={url.endsWith('geo-location') ? "custom" : "default"}
+                                variant={
+                                    url.endsWith("geo-location")
+                                        ? "custom"
+                                        : "default"
+                                }
                             >
                                 <Fullscreen />
                                 Fullscreen
@@ -401,7 +454,11 @@ export default function PetaBencana({
                                 <PopoverTrigger asChild>
                                     <Button
                                         className="w-full"
-                                        variant={url.endsWith('geo-location') ? "custom" : "default"}
+                                        variant={
+                                            url.endsWith("geo-location")
+                                                ? "custom"
+                                                : "default"
+                                        }
                                     >
                                         Pilih Peta
                                     </Button>
@@ -479,7 +536,11 @@ export default function PetaBencana({
                             <Button
                                 onClick={handleSearchCoordinates}
                                 className="w-full"
-                                variant={url.endsWith('geo-location') ? "custom" : "default"}
+                                variant={
+                                    url.endsWith("geo-location")
+                                        ? "custom"
+                                        : "default"
+                                }
                             >
                                 <Search className="mr-2 h-4 w-4" /> Cari
                                 Koordinat
